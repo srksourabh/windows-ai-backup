@@ -29,7 +29,7 @@ from .paths import expand
 PUBLISHER_PUBLIC_KEY = "p/kEGjqRG0XD6hwImIGCrPoNUkMHaoQodJvVWQ7pmzQ="
 
 LICENSE_PATH = "%APPDATA%/WindowsAIBackup/license.key"
-PURCHASE_URL = "https://github.com/srksourabh/windows-ai-backup#premium"
+PURCHASE_URL = "https://github.com/srksourabh/windows-ai-backup/blob/main/PRICING.md"
 
 
 class Edition(str, Enum):
