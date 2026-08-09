@@ -1,0 +1,1109 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "aider",
+      "name": "Aider",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.aider.conf.yml",
+        "~/.aider.model.settings.yml"
+      ],
+      "items": [
+        {
+          "path": "~/.aider.conf.yml",
+          "kind": "config",
+          "note": "Default model and flags"
+        },
+        {
+          "path": "~/.aider.model.settings.yml",
+          "kind": "config",
+          "note": "Per-model settings"
+        },
+        {
+          "path": "~/.aider.model.metadata.json",
+          "kind": "config"
+        }
+      ],
+      "install": {
+        "pipx": "aider-chat",
+        "uv": "aider-chat",
+        "docs": "https://aider.chat/docs"
+      }
+    },
+    {
+      "id": "amazon-q",
+      "name": "Amazon Q Developer",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.aws/amazonq"
+      ],
+      "items": [
+        {
+          "path": "~/.aws/amazonq/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.aws/amazonq/global_context.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.aws/amazonq/profiles",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "include": [
+            "**/*.json",
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.aws/amazonq/cli-agents",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom agents",
+          "include": [
+            "**/*.json"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.aws/amazonq/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Amazon Q"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.aws.amazon.com/amazonq/"
+      }
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.claude",
+        "~/.claude.json"
+      ],
+      "items": [
+        {
+          "path": "~/.claude.json",
+          "kind": "config",
+          "note": "Global config: MCP servers, account, per-project settings"
+        },
+        {
+          "path": "~/.claude/settings.json",
+          "kind": "config",
+          "note": "Permissions, plugins, statusline, effort level"
+        },
+        {
+          "path": "~/.claude/settings.local.json",
+          "kind": "config",
+          "note": "Machine-local overrides"
+        },
+        {
+          "path": "~/.claude/CLAUDE.md",
+          "kind": "prompt",
+          "note": "Global master prompt"
+        },
+        {
+          "path": "~/CLAUDE.md",
+          "kind": "prompt",
+          "note": "Home-scope master prompt"
+        },
+        {
+          "path": "~/.claude/rules",
+          "kind": "prompt",
+          "note": "Rule set loaded into every session",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.claude/agents",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom subagent definitions",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.claude/commands",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom slash commands",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.claude/skills",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 200,
+          "note": "Custom and installed skills"
+        },
+        {
+          "path": "~/.claude/local-plugins",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Locally authored plugins"
+        },
+        {
+          "path": "~/.claude/scripts",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Helper scripts referenced by hooks and statusline"
+        },
+        {
+          "path": "~/.claude/statusline-command.js",
+          "kind": "config"
+        },
+        {
+          "path": "~/.claude/statusline-command.ps1",
+          "kind": "config"
+        },
+        {
+          "path": "~/.claude/statusline-command.sh",
+          "kind": "config"
+        },
+        {
+          "path": "~/.claude/keybindings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.claude/mcp_config.json",
+          "kind": "config",
+          "note": "Standalone MCP config"
+        },
+        {
+          "path": "~/.claude/claude_desktop_config.json",
+          "kind": "config",
+          "note": "Desktop MCP config staged by the CLI"
+        },
+        {
+          "path": "~/.claude/plugins/installed_plugins.json",
+          "kind": "config",
+          "note": "Enabled plugins, restored by name"
+        },
+        {
+          "path": "~/.claude/plugins/known_marketplaces.json",
+          "kind": "config",
+          "note": "Plugin marketplace sources"
+        },
+        {
+          "path": "~/.claude/plugins/config.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.claude/skills-lock.json",
+          "kind": "config",
+          "note": "Pinned skill versions"
+        },
+        {
+          "path": "~/.claude/projects",
+          "kind": "prompt",
+          "note": "Per-project auto-memory",
+          "include": [
+            "**/memory/**/*.md"
+          ]
+        },
+        {
+          "path": "~/.claude/.credentials.json",
+          "kind": "secret",
+          "note": "OAuth tokens and API key"
+        },
+        {
+          "path": "~/.claude/plugins/cache",
+          "kind": "record",
+          "note": "Plugin payloads — re-cloned from marketplaces"
+        },
+        {
+          "path": "~/.claude/projects",
+          "kind": "record",
+          "note": "Session transcripts — not needed for a fresh setup"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.claude.json",
+          "fmt": "claude_json",
+          "client": "Claude Code"
+        },
+        {
+          "path": "~/.claude/mcp_config.json",
+          "fmt": "mcp_servers",
+          "client": "Claude Code"
+        }
+      ],
+      "install": {
+        "npm": "@anthropic-ai/claude-code",
+        "docs": "https://docs.claude.com/en/docs/claude-code",
+        "note": "Native installer: irm https://claude.ai/install.ps1 | iex"
+      }
+    },
+    {
+      "id": "cline-cli",
+      "name": "Cline CLI",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.cline"
+      ],
+      "items": [
+        {
+          "path": "~/.cline/data",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 40,
+          "note": "Settings, rules, MCP config",
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.cline/data/mcp_settings.json",
+          "fmt": "mcp_servers",
+          "client": "Cline CLI"
+        }
+      ],
+      "install": {
+        "npm": "cline",
+        "docs": "https://docs.cline.bot"
+      }
+    },
+    {
+      "id": "codex",
+      "name": "OpenAI Codex CLI",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.codex"
+      ],
+      "items": [
+        {
+          "path": "~/.codex/config.toml",
+          "kind": "config",
+          "note": "Models, providers, sandbox policy, MCP servers"
+        },
+        {
+          "path": "~/.codex/AGENTS.md",
+          "kind": "prompt",
+          "note": "Global master prompt"
+        },
+        {
+          "path": "~/.codex/prompts",
+          "kind": "prompt",
+          "note": "Saved prompts",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.codex/skills",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Skills"
+        },
+        {
+          "path": "~/.codex/auth.json",
+          "kind": "secret",
+          "note": "API key or ChatGPT session"
+        },
+        {
+          "path": "~/.codex/sessions",
+          "kind": "record",
+          "note": "Session transcripts"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.codex/config.toml",
+          "fmt": "toml_mcp",
+          "client": "Codex CLI"
+        }
+      ],
+      "install": {
+        "npm": "@openai/codex",
+        "docs": "https://developers.openai.com/codex/cli"
+      }
+    },
+    {
+      "id": "copilot-cli",
+      "name": "GitHub Copilot CLI",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.copilot"
+      ],
+      "items": [
+        {
+          "path": "~/.copilot/config.json",
+          "kind": "config",
+          "note": "Model and client settings"
+        },
+        {
+          "path": "~/.copilot/mcp-config.json",
+          "kind": "config",
+          "note": "MCP servers"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.copilot/mcp-config.json",
+          "fmt": "mcp_servers",
+          "client": "Copilot CLI"
+        }
+      ],
+      "install": {
+        "npm": "@github/copilot"
+      }
+    },
+    {
+      "id": "crush",
+      "name": "Charm Crush",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/crush",
+        "%LOCALAPPDATA%/crush"
+      ],
+      "items": [
+        {
+          "path": "~/.config/crush/crush.json",
+          "kind": "config",
+          "note": "Providers, models, MCP servers"
+        },
+        {
+          "path": "%LOCALAPPDATA%/crush/crush.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.config/crush/CRUSH.md",
+          "kind": "prompt"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.config/crush/crush.json",
+          "fmt": "mcp_servers",
+          "client": "Crush"
+        }
+      ],
+      "install": {
+        "npm": "@charmland/crush",
+        "docs": "https://github.com/charmbracelet/crush"
+      }
+    },
+    {
+      "id": "gemini-cli",
+      "name": "Google Gemini CLI",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.gemini"
+      ],
+      "items": [
+        {
+          "path": "~/.gemini/settings.json",
+          "kind": "config",
+          "note": "MCP servers, hooks, IDE and security settings"
+        },
+        {
+          "path": "~/.gemini/GEMINI.md",
+          "kind": "prompt",
+          "note": "Global master prompt"
+        },
+        {
+          "path": "~/.gemini/commands",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom commands",
+          "include": [
+            "**/*.toml",
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.gemini/skills",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Skills"
+        },
+        {
+          "path": "~/.gemini/trustedFolders.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.gemini/google_accounts.json",
+          "kind": "config",
+          "note": "Signed-in Google account identity"
+        },
+        {
+          "path": "~/.gemini/installation_id",
+          "kind": "config",
+          "note": "Install identity"
+        },
+        {
+          "path": "~/.gemini/oauth_creds.json",
+          "kind": "secret",
+          "note": "Google OAuth credentials"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.gemini/settings.json",
+          "fmt": "mcp_servers",
+          "client": "Gemini CLI"
+        }
+      ],
+      "install": {
+        "npm": "@google/gemini-cli"
+      }
+    },
+    {
+      "id": "goose",
+      "name": "Block Goose",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/goose",
+        "%APPDATA%/Goose"
+      ],
+      "items": [
+        {
+          "path": "~/.config/goose/config.yaml",
+          "kind": "config",
+          "note": "Providers and extensions (MCP)"
+        },
+        {
+          "path": "~/.config/goose/profiles.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.config/goose/.goosehints",
+          "kind": "prompt"
+        },
+        {
+          "path": "%APPDATA%/Goose/config.yaml",
+          "kind": "config"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.config/goose/config.yaml",
+          "fmt": "yaml_mcp",
+          "client": "Goose"
+        }
+      ],
+      "install": {
+        "docs": "https://block.github.io/goose"
+      }
+    },
+    {
+      "id": "gptme",
+      "name": "gptme",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/gptme"
+      ],
+      "items": [
+        {
+          "path": "~/.config/gptme/config.toml",
+          "kind": "config",
+          "note": "Providers, models, tools"
+        },
+        {
+          "path": "~/.config/gptme/prompts",
+          "kind": "prompt",
+          "include": [
+            "**/*.md",
+            "**/*.txt",
+            "**/*.mdc",
+            "**/*.prompt"
+          ]
+        }
+      ],
+      "install": {
+        "pipx": "gptme"
+      }
+    },
+    {
+      "id": "kilocode-cli",
+      "name": "Kilo Code CLI",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.kilocode"
+      ],
+      "items": [
+        {
+          "path": "~/.kilocode",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "note": "Settings and rules",
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        }
+      ],
+      "install": {
+        "npm": "@kilocode/cli"
+      }
+    },
+    {
+      "id": "llm-datasette",
+      "name": "llm (Datasette)",
+      "category": "Agent CLI",
+      "detect": [
+        "%APPDATA%/io.datasette.llm",
+        "~/.config/io.datasette.llm"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/io.datasette.llm/default_model.txt",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/io.datasette.llm/extra-openai-models.yaml",
+          "kind": "config",
+          "note": "Custom model endpoints"
+        },
+        {
+          "path": "%APPDATA%/io.datasette.llm/templates",
+          "kind": "prompt",
+          "include": [
+            "**/*.yaml",
+            "**/*.yml"
+          ]
+        },
+        {
+          "path": "%APPDATA%/io.datasette.llm/keys.json",
+          "kind": "secret",
+          "note": "Provider API keys"
+        },
+        {
+          "path": "%APPDATA%/io.datasette.llm/logs.db",
+          "kind": "record",
+          "note": "Prompt log database"
+        }
+      ],
+      "install": {
+        "pipx": "llm",
+        "docs": "https://llm.datasette.io"
+      }
+    },
+    {
+      "id": "mods",
+      "name": "Charm Mods",
+      "category": "Agent CLI",
+      "detect": [
+        "%APPDATA%/mods",
+        "~/.config/mods"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/mods/mods.yml",
+          "kind": "config",
+          "note": "Providers, models, roles"
+        },
+        {
+          "path": "~/.config/mods/mods.yml",
+          "kind": "config"
+        }
+      ],
+      "install": {
+        "choco": "mods",
+        "docs": "https://github.com/charmbracelet/mods"
+      }
+    },
+    {
+      "id": "open-interpreter",
+      "name": "Open Interpreter",
+      "category": "Agent CLI",
+      "detect": [
+        "%APPDATA%/Open Interpreter",
+        "~/.config/open-interpreter"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Open Interpreter/profiles",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Profiles",
+          "include": [
+            "**/*.yaml",
+            "**/*.py"
+          ]
+        },
+        {
+          "path": "~/.config/open-interpreter/config.yaml",
+          "kind": "config"
+        }
+      ],
+      "install": {
+        "pipx": "open-interpreter"
+      }
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/opencode",
+        "%APPDATA%/ai.opencode.desktop"
+      ],
+      "items": [
+        {
+          "path": "~/.config/opencode/opencode.json",
+          "kind": "config",
+          "note": "Providers, models, MCP servers"
+        },
+        {
+          "path": "~/.config/opencode/AGENTS.md",
+          "kind": "prompt"
+        },
+        {
+          "path": "~/.config/opencode/agent",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom agents",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.config/opencode/command",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom commands",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.local/share/opencode/auth.json",
+          "kind": "secret",
+          "note": "Provider credentials"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.config/opencode/opencode.json",
+          "fmt": "mcp_servers",
+          "client": "OpenCode"
+        }
+      ],
+      "install": {
+        "npm": "opencode-ai",
+        "docs": "https://opencode.ai/docs"
+      }
+    },
+    {
+      "id": "openhands",
+      "name": "OpenHands",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.openhands"
+      ],
+      "items": [
+        {
+          "path": "~/.openhands/settings.json",
+          "kind": "config",
+          "note": "LLM provider and agent settings"
+        },
+        {
+          "path": "~/.openhands/config.toml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.openhands/sessions",
+          "kind": "record",
+          "note": "Session state"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.all-hands.dev"
+      }
+    },
+    {
+      "id": "plandex",
+      "name": "Plandex",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.plandex-home-v2",
+        "~/.plandex-home"
+      ],
+      "items": [
+        {
+          "path": "~/.plandex-home-v2/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.plandex-home-v2/auth.json",
+          "kind": "secret"
+        }
+      ],
+      "install": {
+        "docs": "https://plandex.ai"
+      }
+    },
+    {
+      "id": "qodo",
+      "name": "Qodo Command",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.qodo"
+      ],
+      "items": [
+        {
+          "path": "~/.qodo",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "note": "Agents, settings, MCP",
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.qodo/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Qodo"
+        }
+      ],
+      "install": {
+        "npm": "@qodo/command"
+      }
+    },
+    {
+      "id": "shell-gpt",
+      "name": "ShellGPT",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/shell_gpt"
+      ],
+      "items": [
+        {
+          "path": "~/.config/shell_gpt/.sgptrc",
+          "kind": "config",
+          "note": "Model and behaviour settings"
+        },
+        {
+          "path": "~/.config/shell_gpt/roles",
+          "kind": "prompt",
+          "note": "Custom roles",
+          "include": [
+            "**/*.json"
+          ]
+        }
+      ],
+      "install": {
+        "pipx": "shell-gpt"
+      }
+    },
+    {
+      "id": "aichat",
+      "name": "aichat",
+      "category": "Agent CLI",
+      "detect": [
+        "%APPDATA%/aichat",
+        "~/.config/aichat"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/aichat/config.yaml",
+          "kind": "config",
+          "note": "Clients, models, RAG settings"
+        },
+        {
+          "path": "~/.config/aichat/config.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/aichat/roles",
+          "kind": "prompt",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "%APPDATA%/aichat/functions",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Function tools"
+        }
+      ],
+      "install": {
+        "choco": "aichat",
+        "docs": "https://github.com/sigoden/aichat"
+      }
+    },
+    {
+      "id": "fabric",
+      "name": "Fabric",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/fabric"
+      ],
+      "items": [
+        {
+          "path": "~/.config/fabric/.env",
+          "kind": "config",
+          "note": "Provider endpoints"
+        },
+        {
+          "path": "~/.config/fabric/patterns",
+          "kind": "prompt",
+          "note": "Prompt patterns",
+          "include": [
+            "**/*.md"
+          ]
+        }
+      ],
+      "install": {
+        "docs": "https://github.com/danielmiessler/fabric"
+      }
+    },
+    {
+      "id": "codebuff",
+      "name": "Codebuff",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/manicode",
+        "~/.codebuff"
+      ],
+      "items": [
+        {
+          "path": "~/.config/manicode/credentials.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.codebuff",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        }
+      ],
+      "install": {
+        "npm": "codebuff"
+      }
+    },
+    {
+      "id": "droid-factory",
+      "name": "Factory Droid",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.factory"
+      ],
+      "items": [
+        {
+          "path": "~/.factory/config.json",
+          "kind": "config",
+          "note": "Model and provider settings"
+        },
+        {
+          "path": "~/.factory/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.factory/AGENTS.md",
+          "kind": "prompt"
+        },
+        {
+          "path": "~/.factory/droids",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom droids",
+          "include": [
+            "**/*.md"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.factory/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Factory Droid"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.factory.ai"
+      }
+    },
+    {
+      "id": "amp-code",
+      "name": "Amp (Sourcegraph)",
+      "category": "Agent CLI",
+      "detect": [
+        "~/.config/amp",
+        "%APPDATA%/amp"
+      ],
+      "items": [
+        {
+          "path": "~/.config/amp/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/amp/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.config/amp/AGENT.md",
+          "kind": "prompt"
+        }
+      ],
+      "install": {
+        "npm": "@sourcegraph/amp"
+      }
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "continue",
+      "name": "Continue",
+      "category": "AI IDE Extension",
+      "detect": [
+        "~/.continue"
+      ],
+      "items": [
+        {
+          "path": "~/.continue/config.json",
+          "kind": "config",
+          "note": "Models and context providers"
+        },
+        {
+          "path": "~/.continue/config.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.continue/assistants",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "include": [
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/.continue/rules",
+          "kind": "prompt",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.continue/prompts",
+          "kind": "prompt",
+          "include": [
+            "**/*.prompt",
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.continue/mcpServers",
+          "kind": "config",
+          "include": [
+            "**/*.yaml",
+            "**/*.json"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.continue/config.json",
+          "fmt": "mcp_servers",
+          "client": "Continue"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.continue.dev"
+      }
+    },
+    {
+      "id": "tabnine",
+      "name": "Tabnine",
+      "category": "AI IDE Extension",
+      "detect": [
+        "%LOCALAPPDATA%/TabNine"
+      ],
+      "items": [
+        {
+          "path": "%LOCALAPPDATA%/TabNine/tabnine_config.json",
+          "kind": "config"
+        },
+        {
+          "path": "%LOCALAPPDATA%/TabNine",
+          "kind": "record",
+          "note": "Local model payloads"
+        }
+      ],
+      "install": {
+        "docs": "https://www.tabnine.com"
+      }
+    },
+    {
+      "id": "supermaven",
+      "name": "Supermaven",
+      "category": "AI IDE Extension",
+      "detect": [
+        "%LOCALAPPDATA%/supermaven",
+        "~/.supermaven"
+      ],
+      "items": [
+        {
+          "path": "%LOCALAPPDATA%/supermaven/config.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.supermaven/config.json",
+          "kind": "config"
+        }
+      ],
+      "install": {
+        "docs": "https://supermaven.com"
+      }
+    },
+    {
+      "id": "augment",
+      "name": "Augment Code",
+      "category": "AI IDE Extension",
+      "detect": [
+        "~/.augment",
+        "%APPDATA%/Augment"
+      ],
+      "items": [
+        {
+          "path": "~/.augment",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.augment/guidelines.md",
+          "kind": "prompt"
+        }
+      ],
+      "install": {
+        "docs": "https://www.augmentcode.com"
+      }
+    },
+    {
+      "id": "sourcegraph-cody",
+      "name": "Sourcegraph Cody",
+      "category": "AI IDE Extension",
+      "detect": [
+        "~/.sourcegraph",
+        "%APPDATA%/Code/User/globalStorage/sourcegraph.cody-ai"
+      ],
+      "items": [
+        {
+          "path": "~/.sourcegraph/cody.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/sourcegraph.cody-ai",
+          "kind": "config",
+          "include": [
+            "*.json"
+          ]
+        }
+      ],
+      "install": {
+        "docs": "https://sourcegraph.com/cody"
+      }
+    },
+    {
+      "id": "codeium-extension",
+      "name": "Codeium",
+      "category": "AI IDE Extension",
+      "detect": [
+        "~/.codeium"
+      ],
+      "items": [
+        {
+          "path": "~/.codeium",
+          "kind": "config",
+          "include": [
+            "*.json",
+            "config.json"
+          ]
+        }
+      ],
+      "install": {
+        "docs": "https://codeium.com"
+      }
+    }
+  ]
+}

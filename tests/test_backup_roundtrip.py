@@ -5,23 +5,28 @@ import json
 
 import pytest
 
+from waib import licensing
 from waib import restore as restore_engine
 from waib.backup import run_backup
 from waib.collect import packages
 
 
+#: Small tools that between them still exercise every item kind — config, prompt,
+#: tree, secret and record. Backing up the whole catalog would test breadth the
+#: catalog suite already covers, at nine minutes per run.
+ROUNDTRIP_TOOLS = ["gemini-cli", "copilot-cli", "claude-desktop", "serena"]
+
+
 @pytest.fixture(scope="module")
 def backup(tmp_path_factory):
-    """One real backup of this machine, shared by every test in the module.
-
-    A full scan is the most expensive thing in the suite; running it per-test
-    would make the build take minutes for no extra coverage.
-    """
+    """One real backup of this machine, shared by every test in the module."""
     return run_backup(
         destination=tmp_path_factory.mktemp("roundtrip"),
         capture_secrets=False,
         make_zip=False,
         progress=lambda _msg: None,
+        tools=ROUNDTRIP_TOOLS,
+        license=licensing.License(licensing.Edition.PREMIUM, name="test"),
     )
 
 

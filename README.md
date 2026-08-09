@@ -11,7 +11,8 @@ the whole setup on a fresh machine.
 [![Download](https://img.shields.io/badge/Download-WindowsAIBackup.exe-2ea44f?style=for-the-badge&logo=windows)](https://github.com/srksourabh/windows-ai-backup/releases/latest/download/WindowsAIBackup.exe)
 [![Premium](https://img.shields.io/badge/Premium-%241%20once-8250df?style=for-the-badge)](PRICING.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-93%20passing-brightgreen?style=for-the-badge)](tests)
+[![Catalog](https://img.shields.io/badge/catalog-87%2B%20AI%20tools-0969da?style=for-the-badge)](waib/data/catalog.d)
+[![Tests](https://img.shields.io/badge/tests-121%20passing-brightgreen?style=for-the-badge)](tests)
 
 *Built by [Sourabh Bhaumik](https://github.com/srksourabh)*
 
@@ -34,7 +35,7 @@ Know the difference between **what exists nowhere else** and **what the internet
 
 ```mermaid
 flowchart LR
-    A["🔍 Scan<br/>25 known AI tools"] --> B{Can this be<br/>re-downloaded?}
+    A["🔍 Scan<br/>87 known AI tools<br/>+ heuristic discovery"] --> B{Can this be<br/>re-downloaded?}
     B -->|No| C["📄 Copy it<br/>prompts · skills · agents<br/>settings · custom servers"]
     B -->|Yes| D["📝 Record it<br/>plugin sources · extension ids<br/>model names · package names"]
     B -->|It's a secret| E["🔐 Encrypt it<br/>AES-256-GCM vault"]
@@ -83,20 +84,26 @@ The same executable runs in **Demo** until you activate a key. Full details in [
 
 | | Demo (free) | Premium — **$1 once** |
 |---|:---:|:---:|
-| Scan every AI tool + full MCP registry | ✅ | ✅ |
-| Tools captured in a backup | 5 | **all 25** |
+| Scan, catalog, MCP registry, discovery report | ✅ full | ✅ full |
+| **Tools captured in a backup** | **any 5 you pick** | **unlimited** |
 | Restore a backup | ✅ **always** | ✅ |
 | Encrypted credential vault | — | ✅ |
+| Capture uncatalogued tools | — | ✅ |
 | Custom MCP server source | listed only | ✅ copied |
 | Future tools | — | ✅ |
 
-**Scanning and restoring are never gated.** You see everything the tool finds before
-deciding to pay, and a backup you already made stays restorable forever, in any edition.
+Demo does not choose for you — pick any five:
 
 ```powershell
-WindowsAIBackup.exe license          # what you have, what Premium adds
-WindowsAIBackup.exe activate <key>   # unlock
+WindowsAIBackup.exe catalog                                    # every tool id
+WindowsAIBackup.exe backup --tools claude-code,cursor,ollama,vscode,windsurf
+WindowsAIBackup.exe license                                    # what Premium adds
+WindowsAIBackup.exe activate <key>                             # unlock
 ```
+
+**Scanning, discovery and restore are never gated.** You see everything the tool
+finds before deciding to pay, and a backup you already made stays restorable
+forever, in any edition.
 
 ---
 
@@ -121,44 +128,110 @@ WindowsAIBackup.exe activate <key>   # unlock
 
 ## Tools it knows about
 
+**87 in the shipped catalog, and it is not a closed list.**
+
 ```mermaid
 mindmap
-  root((Windows<br/>AI Backup))
-    Agent CLIs
+  root((87 tools<br/>+ discovery))
+    Agent CLIs · 24
       Claude Code
       OpenAI Codex
       Gemini CLI
-      GitHub Copilot CLI
-      Cline
-      Aider
-      OpenCode
-      Goose
-      Amazon Q
-    AI IDEs
+      Copilot CLI
+      Cline · Aider
+      OpenCode · Goose
+      Amazon Q · Qodo
+      Crush · Plandex
+      Factory Droid · Amp
+      OpenHands · fabric
+      aichat · mods · llm
+    AI IDEs · 13
       Cursor
-      VS Code
-      VS Code Insiders
+      VS Code + Insiders
       Windsurf
       Antigravity
-      Zed
-      JetBrains Junie
-      Continue
-    Local Inference
-      Ollama
-      LM Studio
-    Desktop Apps
+      Zed · Kiro · Trae
+      Void · PearAI
+      JetBrains AI · Junie
+    Local Inference · 12
+      Ollama · LM Studio
+      Jan · GPT4All · Msty
+      AnythingLLM
+      Open WebUI
+      SillyTavern
+      KoboldCpp · LocalAI
+    Desktop Apps · 10
       Claude Desktop
-    MCP
-      Custom server workspace
-      Serena
-    Platforms
-      OpenClaw
-      claude-mem
-      Portable .agent dirs
+      ChatGPT · Perplexity
+      Cherry Studio
+      LobeChat · Chatbox
+      Wispr Flow
+    Platforms · 9
+      OpenClaw · n8n
+      Flowise · Langflow
+      Dify · CrewAI
+      Letta · mem0
+    Extensions · 6
+      Continue · Tabnine
+      Supermaven · Augment
+      Cody · Codeium
+    MCP · 5
+      Custom workspace
+      Serena · mcpm
+    LLM Ops · 6
+      LangSmith · Langfuse
+      W&B · MLflow
+      promptfoo · HF CLI
 ```
 
-Adding another tool means appending one `Target` to [`waib/catalog.py`](waib/catalog.py).
-The scanner, collectors and restore engine need no changes.
+### Three ways the list grows
+
+| | How | Needs a new build? |
+|---|---|:---:|
+| **Shipped catalog** | JSON in [`waib/data/catalog.d/`](waib/data/catalog.d) — one object per tool | no |
+| **Your own tools** | Drop JSON into `%APPDATA%\WindowsAIBackup\catalog.local\` | no |
+| **Everything else** | Heuristic discovery finds tools nobody catalogued | no |
+
+```powershell
+WindowsAIBackup.exe catalog            # browse all 87, '*' marks what's installed
+WindowsAIBackup.exe catalog --where    # which files the catalog loads from
+WindowsAIBackup.exe catalog --validate # check your own additions parse
+WindowsAIBackup.exe discover           # what's here that the catalog misses
+```
+
+### Discovery — for the tools nobody has catalogued
+
+A curated list can never keep up; new agents ship weekly, and your company's
+internal tool will never be on any public list. Discovery looks for the *shapes*
+AI tooling takes on disk rather than for known names.
+
+```mermaid
+flowchart TD
+    S["Every directory under<br/>~ · %APPDATA% · %LOCALAPPDATA%"] --> F{Already in<br/>the catalog?}
+    F -->|Yes| SKIP1["skip"]
+    F -->|No| G{A git repo or<br/>npm package?}
+    G -->|Yes| SKIP2["skip — that's your project,<br/>not a tool"]
+    G -->|No| SCORE["Score the evidence"]
+
+    SCORE --> E1["declares MCP servers · +4"]
+    SCORE --> E2["AGENTS.md / CLAUDE.md · +3"]
+    SCORE --> E3["name matches an AI vendor · +3"]
+    SCORE --> E4["settings name a model or provider · +1"]
+
+    E1 --> T{score ≥ 3?}
+    E2 --> T
+    E3 --> T
+    E4 --> T
+    T -->|Yes| KEEP["Captured — the evidence files<br/>plus top-level settings"]
+    T -->|No| SKIP3["skip"]
+
+    style KEEP fill:#1a7f37,color:#fff
+    style SKIP2 fill:#6e7781,color:#fff
+```
+
+On the machine this was built on, discovery found **38 AI tools** beyond the 87 in
+the catalog. It captures only the files that earned the score plus top-level
+settings — never a recursive sweep of an unknown directory.
 
 ---
 
@@ -173,7 +246,7 @@ sequenceDiagram
     participant O as Backup folder
 
     U->>W: backup --secrets
-    W->>FS: Walk 25 catalog targets
+    W->>FS: Walk 87 catalog targets
     FS-->>W: Config roots that exist
     W->>W: Redact secrets by key, value shape, arg position
     W->>W: Scrub keys hardcoded in source
@@ -308,6 +381,12 @@ A full scan of a production backup — 1950 files, 12 credential patterns — co
 | `license` | Show the current edition and what Premium adds |
 | `license --remove` | Remove the installed license |
 | `activate <key>` | Activate a Premium key |
+| `catalog` | Browse every tool the catalog knows |
+| `catalog --where` | Show which files the catalog loads from |
+| `catalog --validate` | Check every catalog file parses |
+| `discover` | Find AI tools that are not in the catalog |
+| `backup --tools a,b,c` | Capture only these tools (Demo picks its 5 this way) |
+| `backup --discover` | Also capture uncatalogued tools (Premium) |
 
 ---
 
@@ -330,6 +409,43 @@ python -m waib scan
 ```
 
 Requires Python 3.11+ (uses `tomllib`). Windows only — the whole point is Windows paths.
+
+---
+
+## Extending the catalog
+
+One JSON object adds a tool. Drop this in `%APPDATA%\WindowsAIBackup\catalog.localcme.json`:
+
+```json
+{
+  "tools": [{
+    "id": "acme-agent",
+    "name": "Acme Internal Agent",
+    "category": "Agent CLI",
+    "detect": ["~/.acme"],
+    "install": { "npm": "@acme/agent" },
+    "items": [
+      { "path": "~/.acme/config.json", "kind": "config", "note": "Providers and models" },
+      { "path": "~/.acme/AGENTS.md",   "kind": "prompt", "note": "Master prompt" },
+      { "path": "~/.acme/skills",      "kind": "tree",   "include": ["**/*.md"] },
+      { "path": "~/.acme/auth.json",   "kind": "secret" },
+      { "path": "~/.acme/cache",       "kind": "record", "note": "Re-downloadable" }
+    ],
+    "mcp_sources": [
+      { "path": "~/.acme/config.json", "fmt": "mcp_servers", "client": "Acme Agent" }
+    ]
+  }]
+}
+```
+
+Item kinds: `config` (copy, redact secrets) · `prompt` (copy + mirror into `prompts/`) ·
+`tree` (copy with globs and size caps) · `secret` (vault only, never in the clear) ·
+`record` (note it, don't copy — it's re-downloadable).
+
+MCP dialects: `mcp_servers` · `claude_json` · `vscode_mcp` · `toml_mcp` · `yaml_mcp`.
+
+Later files win, so you can also *correct* a shipped entry without editing the install.
+`catalog --validate` checks your work; a broken file is reported, never fatal.
 
 ---
 

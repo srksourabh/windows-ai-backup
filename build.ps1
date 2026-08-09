@@ -46,7 +46,9 @@ python -m PyInstaller `
     --clean `
     --noconfirm `
     --collect-submodules waib `
+    --add-data "waib/data;waib/data" `
     --hidden-import cryptography.hazmat.primitives.ciphers.aead `
+    --hidden-import cryptography.hazmat.primitives.asymmetric.ed25519 `
     --hidden-import yaml `
     --exclude-module tkinter `
     --exclude-module matplotlib `
@@ -62,7 +64,8 @@ if (-not (Test-Path $exe)) { throw "Expected $exe to exist." }
 
 Write-Step 'Smoke test'
 & $exe --version
-& $exe scan | Select-Object -First 5
+& $exe catalog --validate
+& $exe scan | Select-Object -First 6
 
 $size = [math]::Round((Get-Item $exe).Length / 1MB, 1)
 Write-Host ''

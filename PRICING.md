@@ -1,20 +1,20 @@
 # Demo and Premium
 
 Windows AI Backup ships as one executable. Without a license it runs in **Demo**;
-a Premium key unlocks the rest. No account, no subscription, no server calls.
+a Premium key removes the tool limit. No account, no subscription, no server calls.
 
 ```mermaid
 flowchart LR
-    D["🆓 Demo<br/><b>Free</b>"] --> D1["Full scan — see all 25 tools"]
+    D["🆓 Demo<br/><b>Free</b>"] --> D1["Full scan — every tool found"]
     D --> D2["Full MCP registry"]
-    D --> D3["Backs up 5 tools"]
+    D --> D3["Backs up <b>any 5</b> tools you pick"]
     D --> D4["Full restore, always"]
 
-    P["⭐ Premium<br/><b>$1 once</b>"] --> P1["All 25 tools"]
-    P --> P2["Encrypted credential vault"]
-    P --> P3["Custom MCP server source"]
-    P --> P4["Clean reports"]
-    P --> P5["Future tools included"]
+    P["⭐ Premium<br/><b>$1 once</b>"] --> P1["<b>Unlimited</b> tools"]
+    P --> P2["Discovers tools not in the catalog"]
+    P --> P3["Encrypted credential vault"]
+    P --> P4["Custom MCP server source"]
+    P --> P5["Every tool added in future"]
 
     style D fill:#0969da,color:#fff
     style P fill:#8250df,color:#fff
@@ -25,26 +25,40 @@ flowchart LR
 | | Demo (free) | Premium ($1 once) |
 |---|:---:|:---:|
 | `scan` — see every AI tool on the PC | ✅ full | ✅ full |
+| `catalog` — browse all known tools | ✅ full | ✅ full |
 | `mcp` — unified MCP server registry | ✅ full | ✅ full |
-| Tools captured in a backup | **5** | **all 25** |
+| `discover` — list uncatalogued tools | ✅ full | ✅ full |
+| **Tools captured in a backup** | **any 5 you choose** | **unlimited** |
 | Master prompts, rules, memories | ✅ for those 5 | ✅ all |
 | Skills, agents, slash commands | ✅ for those 5 | ✅ all |
 | Packages, extensions, models, identity, env | ✅ | ✅ |
 | `restore` — put a backup back | ✅ **always** | ✅ |
 | Encrypted credential vault (`--secrets`) | — | ✅ |
+| Capture uncatalogued tools (`--discover`) | — | ✅ |
 | Custom MCP server source captured | listed only | ✅ copied + rebuilt |
 | Reports without a demo notice | — | ✅ |
 | Tools added in future versions | — | ✅ |
 
-The five Demo tools are **Claude Code, Claude Desktop, OpenAI Codex, Gemini CLI,
-and Cursor** — enough that the Demo is genuinely useful on its own, not a
-countdown timer.
+### Choosing your five
 
-## Two things that are never gated
+Demo does not pick for you. Any five tools in the catalog, your choice:
 
-**Scanning.** You see the complete picture — every tool, every MCP server —
-before deciding whether to pay. A demo that hides what it found would be asking
-you to buy blind.
+```powershell
+WindowsAIBackup.exe catalog                    # see every id
+WindowsAIBackup.exe backup --tools claude-code,cursor,ollama,vscode,windsurf
+```
+
+Run it without `--tools` and it picks the five most broadly useful tools that are
+actually installed, so the first run still lands on something worth having.
+
+## Three things that are never gated
+
+**Scanning.** You see the complete picture — every tool, every MCP server, every
+uncatalogued directory — before deciding whether to pay. A demo that hides what it
+found would be asking you to buy blind.
+
+**Discovery reporting.** `discover` lists everything it finds for free. Premium is
+needed to *capture* those tools, not to learn they exist.
 
 **Restore.** A backup you already made stays restorable in any edition, forever.
 Holding your own configuration hostage would be indefensible, so `restore` and
@@ -119,3 +133,16 @@ python tools/keygen.py verify <key>
 `tools/publisher_private.key` is gitignored. Back it up somewhere safe — losing it
 means every key you have issued can no longer be reissued, and replacing it
 invalidates all existing keys.
+
+### Growing the catalog
+
+The catalog is JSON, not code. Adding tools does not require a new build:
+
+```powershell
+python tools/build_catalog.py        # regenerate waib/data/catalog.d/*.json
+WindowsAIBackup.exe catalog --validate
+```
+
+Ship new entries either in the next release or as a drop-in file users place in
+`%APPDATA%\WindowsAIBackup\catalog\`. Users can add their own in-house tools in
+`%APPDATA%\WindowsAIBackup\catalog.local\` without waiting for you.

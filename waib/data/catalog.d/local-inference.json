@@ -1,0 +1,408 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "category": "Local Inference",
+      "detect": [
+        "~/.ollama"
+      ],
+      "items": [
+        {
+          "path": "~/.ollama/server.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.ollama/id_ed25519",
+          "kind": "secret",
+          "note": "Ollama identity key"
+        },
+        {
+          "path": "~/.ollama/models/manifests",
+          "kind": "record",
+          "note": "Installed models — re-pulled by name"
+        },
+        {
+          "path": "~/.ollama/models/blobs",
+          "kind": "record",
+          "note": "Model weights"
+        }
+      ],
+      "install": {
+        "winget": "Ollama.Ollama",
+        "url": "https://ollama.com/download/windows"
+      }
+    },
+    {
+      "id": "lmstudio",
+      "name": "LM Studio",
+      "category": "Local Inference",
+      "detect": [
+        "~/.lmstudio"
+      ],
+      "items": [
+        {
+          "path": "~/.lmstudio/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.lmstudio/config-presets",
+          "kind": "config",
+          "note": "Inference presets",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/.lmstudio/.internal",
+          "kind": "config",
+          "note": "App settings",
+          "include": [
+            "*.json"
+          ]
+        },
+        {
+          "path": "~/.lmstudio/models",
+          "kind": "record",
+          "note": "Model weights — re-download from the Hub"
+        },
+        {
+          "path": "~/.lmstudio/conversations",
+          "kind": "record"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.lmstudio/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "LM Studio"
+        }
+      ],
+      "install": {
+        "winget": "ElementLabs.LMStudio",
+        "url": "https://lmstudio.ai/download"
+      }
+    },
+    {
+      "id": "jan",
+      "name": "Jan",
+      "category": "Local Inference",
+      "detect": [
+        "~/jan",
+        "%APPDATA%/Jan"
+      ],
+      "items": [
+        {
+          "path": "~/jan/settings/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/jan/assistants",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Assistants",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/jan/engines",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Engine settings",
+          "include": [
+            "**/*.json",
+            "**/*.yaml"
+          ]
+        },
+        {
+          "path": "~/jan/models",
+          "kind": "record",
+          "note": "Model weights"
+        },
+        {
+          "path": "~/jan/threads",
+          "kind": "record",
+          "note": "Conversation history"
+        }
+      ],
+      "install": {
+        "url": "https://jan.ai/download"
+      }
+    },
+    {
+      "id": "gpt4all",
+      "name": "GPT4All",
+      "category": "Local Inference",
+      "detect": [
+        "%LOCALAPPDATA%/nomic.ai/GPT4All",
+        "~/AppData/Roaming/nomic.ai"
+      ],
+      "items": [
+        {
+          "path": "%LOCALAPPDATA%/nomic.ai/GPT4All/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%LOCALAPPDATA%/nomic.ai/GPT4All",
+          "kind": "record",
+          "note": "Model weights"
+        }
+      ],
+      "install": {
+        "url": "https://gpt4all.io"
+      }
+    },
+    {
+      "id": "msty",
+      "name": "Msty",
+      "category": "Local Inference",
+      "detect": [
+        "%APPDATA%/Msty",
+        "~/.msty"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Msty",
+          "kind": "config",
+          "include": [
+            "*.json"
+          ]
+        },
+        {
+          "path": "~/.msty/models",
+          "kind": "record",
+          "note": "Model weights"
+        }
+      ],
+      "install": {
+        "url": "https://msty.app"
+      }
+    },
+    {
+      "id": "anythingllm",
+      "name": "AnythingLLM",
+      "category": "Local Inference",
+      "detect": [
+        "%APPDATA%/anythingllm-desktop"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/anythingllm-desktop/storage",
+          "kind": "config",
+          "note": "Workspace and provider settings",
+          "include": [
+            "*.json",
+            "**/*.json"
+          ],
+          "max_total_mb": 20
+        },
+        {
+          "path": "%APPDATA%/anythingllm-desktop/storage/models",
+          "kind": "record",
+          "note": "Model weights"
+        },
+        {
+          "path": "%APPDATA%/anythingllm-desktop/storage/vector-cache",
+          "kind": "record",
+          "note": "Vector index"
+        }
+      ],
+      "install": {
+        "url": "https://anythingllm.com/download"
+      }
+    },
+    {
+      "id": "open-webui",
+      "name": "Open WebUI",
+      "category": "Local Inference",
+      "detect": [
+        "~/.open-webui",
+        "%APPDATA%/open-webui"
+      ],
+      "items": [
+        {
+          "path": "~/.open-webui/config.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.open-webui/webui.db",
+          "kind": "record",
+          "note": "Application database"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.openwebui.com"
+      }
+    },
+    {
+      "id": "koboldcpp",
+      "name": "KoboldCpp",
+      "category": "Local Inference",
+      "detect": [
+        "~/.koboldcpp",
+        "%APPDATA%/KoboldCpp"
+      ],
+      "items": [
+        {
+          "path": "~/.koboldcpp",
+          "kind": "config",
+          "include": [
+            "*.kcpps",
+            "*.json"
+          ]
+        }
+      ],
+      "install": {
+        "url": "https://github.com/LostRuins/koboldcpp"
+      }
+    },
+    {
+      "id": "sillytavern",
+      "name": "SillyTavern",
+      "category": "Local Inference",
+      "detect": [
+        "~/SillyTavern/data",
+        "~/.sillytavern"
+      ],
+      "items": [
+        {
+          "path": "~/SillyTavern/data/default-user/settings.json",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "UI and API settings"
+        },
+        {
+          "path": "~/SillyTavern/data/default-user/context",
+          "kind": "prompt",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/SillyTavern/data/default-user/instruct",
+          "kind": "prompt",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/SillyTavern/data/default-user/characters",
+          "kind": "record",
+          "note": "Character cards"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.sillytavern.app"
+      }
+    },
+    {
+      "id": "text-generation-webui",
+      "name": "text-generation-webui",
+      "category": "Local Inference",
+      "detect": [
+        "~/text-generation-webui/user_data",
+        "~/text-generation-webui/settings.yaml"
+      ],
+      "items": [
+        {
+          "path": "~/text-generation-webui/settings.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/text-generation-webui/user_data/settings.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/text-generation-webui/models",
+          "kind": "record",
+          "note": "Model weights"
+        }
+      ],
+      "install": {
+        "docs": "https://github.com/oobabooga/text-generation-webui"
+      }
+    },
+    {
+      "id": "localai",
+      "name": "LocalAI",
+      "category": "Local Inference",
+      "detect": [
+        "~/.localai",
+        "%APPDATA%/LocalAI"
+      ],
+      "items": [
+        {
+          "path": "~/.localai/models",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Model definition YAMLs",
+          "include": [
+            "**/*.yaml",
+            "**/*.yml"
+          ]
+        },
+        {
+          "path": "~/.localai/models",
+          "kind": "record",
+          "note": "Model weights"
+        }
+      ],
+      "install": {
+        "docs": "https://localai.io"
+      }
+    },
+    {
+      "id": "ramalama",
+      "name": "RamaLama",
+      "category": "Local Inference",
+      "detect": [
+        "~/.config/ramalama"
+      ],
+      "items": [
+        {
+          "path": "~/.config/ramalama/ramalama.conf",
+          "kind": "config"
+        },
+        {
+          "path": "~/.local/share/ramalama",
+          "kind": "record",
+          "note": "Model weights"
+        }
+      ],
+      "install": {
+        "pipx": "ramalama"
+      }
+    }
+  ]
+}

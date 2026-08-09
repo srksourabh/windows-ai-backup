@@ -1,0 +1,748 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "antigravity",
+      "name": "Google Antigravity",
+      "category": "AI IDE",
+      "detect": [
+        "~/.antigravity",
+        "%APPDATA%/Antigravity"
+      ],
+      "items": [
+        {
+          "path": "~/.antigravity/rules",
+          "kind": "prompt",
+          "note": "Global rules",
+          "include": [
+            "**/*.md",
+            "**/*.mdc"
+          ]
+        },
+        {
+          "path": "~/.antigravity/argv.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Antigravity/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Antigravity/User/keybindings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Antigravity/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        },
+        {
+          "path": "%APPDATA%/Antigravity IDE/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.gemini/antigravity/mcp_config.json",
+          "kind": "config",
+          "note": "Antigravity MCP servers"
+        },
+        {
+          "path": "~/.gemini/antigravity-cli",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Antigravity CLI config",
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.gemini/antigravity/mcp_config.json",
+          "fmt": "mcp_servers",
+          "client": "Antigravity"
+        }
+      ],
+      "install": {
+        "url": "https://antigravity.google/download"
+      },
+      "extensions_dir": "~/.antigravity/extensions"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "category": "AI IDE",
+      "detect": [
+        "~/.cursor",
+        "%APPDATA%/Cursor"
+      ],
+      "items": [
+        {
+          "path": "~/.cursor/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.cursor/cli-config.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.cursor/rules",
+          "kind": "prompt",
+          "note": "Global rules",
+          "include": [
+            "**/*.md",
+            "**/*.mdc"
+          ]
+        },
+        {
+          "path": "~/.cursor/agents",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom agents",
+          "include": [
+            "**/*.md",
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/.cursor/skills-cursor",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Skills"
+        },
+        {
+          "path": "~/.cursor/plugins",
+          "kind": "tree",
+          "note": "Plugin settings",
+          "include": [
+            "*.json",
+            "*/*.json"
+          ],
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 10
+        },
+        {
+          "path": "~/.cursor/plugins/marketplaces",
+          "kind": "record",
+          "note": "Plugin payloads — re-cloned"
+        },
+        {
+          "path": "%APPDATA%/Cursor/User/settings.json",
+          "kind": "config",
+          "note": "Editor and AI settings"
+        },
+        {
+          "path": "%APPDATA%/Cursor/User/keybindings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Cursor/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        },
+        {
+          "path": "~/.cursor/extensions",
+          "kind": "record",
+          "note": "Extensions — reinstalled by id"
+        },
+        {
+          "path": "~/.cursor/chats",
+          "kind": "record",
+          "note": "Chat history"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.cursor/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Cursor"
+        }
+      ],
+      "install": {
+        "winget": "Anysphere.Cursor",
+        "url": "https://cursor.com/download"
+      },
+      "extensions_dir": "~/.cursor/extensions"
+    },
+    {
+      "id": "kiro",
+      "name": "AWS Kiro",
+      "category": "AI IDE",
+      "detect": [
+        "~/.kiro",
+        "%APPDATA%/Kiro"
+      ],
+      "items": [
+        {
+          "path": "~/.kiro/settings/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.kiro/steering",
+          "kind": "prompt",
+          "note": "Steering documents",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Kiro/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Kiro/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.kiro/settings/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Kiro"
+        }
+      ],
+      "install": {
+        "url": "https://kiro.dev/downloads"
+      },
+      "extensions_dir": "~/.kiro/extensions"
+    },
+    {
+      "id": "pearai",
+      "name": "PearAI",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/PearAI",
+        "~/.pearai"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/PearAI/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.pearai",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml",
+            "**/*.md"
+          ]
+        }
+      ],
+      "install": {
+        "url": "https://trypear.ai"
+      },
+      "extensions_dir": "~/.pearai/extensions"
+    },
+    {
+      "id": "trae",
+      "name": "Trae",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/Trae",
+        "~/.trae"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Trae/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Trae/User/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.trae/rules",
+          "kind": "prompt",
+          "include": [
+            "**/*.md",
+            "**/*.mdc"
+          ]
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "%APPDATA%/Trae/User/mcp.json",
+          "fmt": "vscode_mcp",
+          "client": "Trae"
+        }
+      ],
+      "install": {
+        "url": "https://trae.ai"
+      },
+      "extensions_dir": "~/.trae/extensions"
+    },
+    {
+      "id": "void-editor",
+      "name": "Void",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/Void",
+        "~/.void-editor"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Void/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Void/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        }
+      ],
+      "install": {
+        "url": "https://voideditor.com"
+      },
+      "extensions_dir": "~/.void-editor/extensions"
+    },
+    {
+      "id": "vscode",
+      "name": "Visual Studio Code",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/Code"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Code/User/settings.json",
+          "kind": "config",
+          "note": "Editor plus Copilot and Chat settings"
+        },
+        {
+          "path": "%APPDATA%/Code/User/mcp.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "%APPDATA%/Code/User/chatLanguageModels.json",
+          "kind": "config",
+          "note": "Registered chat models"
+        },
+        {
+          "path": "%APPDATA%/Code/User/keybindings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Code/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        },
+        {
+          "path": "%APPDATA%/Code/User/prompts",
+          "kind": "prompt",
+          "note": "Copilot prompt and instruction files",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code/User/profiles",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "note": "Profiles",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/saoudrizwan.claude-dev/settings",
+          "kind": "config",
+          "note": "Cline settings and MCP servers",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/rooveterinaryinc.roo-cline/settings",
+          "kind": "config",
+          "note": "Roo Code settings and MCP servers",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/kilocode.kilo-code/settings",
+          "kind": "config",
+          "note": "Kilo Code settings",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/continue.continue",
+          "kind": "config",
+          "note": "Continue settings",
+          "include": [
+            "*.json",
+            "*.yaml"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage",
+          "kind": "record",
+          "note": "Extension state — rebuilt on reinstall"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "%APPDATA%/Code/User/mcp.json",
+          "fmt": "vscode_mcp",
+          "client": "VS Code"
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json",
+          "fmt": "mcp_servers",
+          "client": "Cline (VS Code)"
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/rooveterinaryinc.roo-cline/settings/mcp_settings.json",
+          "fmt": "mcp_servers",
+          "client": "Roo Code (VS Code)"
+        },
+        {
+          "path": "%APPDATA%/Code/User/globalStorage/kilocode.kilo-code/settings/mcp_settings.json",
+          "fmt": "mcp_servers",
+          "client": "Kilo Code (VS Code)"
+        }
+      ],
+      "install": {
+        "winget": "Microsoft.VisualStudioCode"
+      },
+      "extensions_dir": "~/.vscode/extensions"
+    },
+    {
+      "id": "vscode-insiders",
+      "name": "VS Code Insiders",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/Code - Insiders"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Code - Insiders/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Code - Insiders/User/mcp.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Code - Insiders/User/chatLanguageModels.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Code - Insiders/User/prompts",
+          "kind": "prompt",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Code - Insiders/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "%APPDATA%/Code - Insiders/User/mcp.json",
+          "fmt": "vscode_mcp",
+          "client": "VS Code Insiders"
+        }
+      ],
+      "install": {
+        "winget": "Microsoft.VisualStudioCode.Insiders"
+      },
+      "extensions_dir": "~/.vscode-insiders/extensions"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "category": "AI IDE",
+      "detect": [
+        "~/.codeium/windsurf",
+        "%APPDATA%/Windsurf"
+      ],
+      "items": [
+        {
+          "path": "~/.codeium/windsurf/mcp_config.json",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.codeium/windsurf/memories",
+          "kind": "prompt",
+          "note": "Cascade memories and global rules",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.codeium/windsurf/global_rules.md",
+          "kind": "prompt",
+          "note": "Global rules"
+        },
+        {
+          "path": "~/.codeium/windsurf-next/mcp_config.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Windsurf/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Windsurf/User/keybindings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Windsurf/User/prompts",
+          "kind": "prompt",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Windsurf/User/chatLanguageModels.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Windsurf/User/snippets",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.codeium/windsurf/mcp_config.json",
+          "fmt": "mcp_servers",
+          "client": "Windsurf"
+        },
+        {
+          "path": "~/.codeium/windsurf-next/mcp_config.json",
+          "fmt": "mcp_servers",
+          "client": "Windsurf Next"
+        }
+      ],
+      "install": {
+        "winget": "Codeium.Windsurf",
+        "url": "https://windsurf.com/download"
+      },
+      "extensions_dir": "~/.windsurf/extensions"
+    },
+    {
+      "id": "zed",
+      "name": "Zed",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/Zed",
+        "~/.config/zed"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Zed/settings.json",
+          "kind": "config",
+          "note": "Assistant and model settings"
+        },
+        {
+          "path": "%APPDATA%/Zed/keymap.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.config/zed/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Zed/prompts",
+          "kind": "prompt",
+          "include": [
+            "**/*.md"
+          ]
+        }
+      ],
+      "install": {
+        "winget": "ZedIndustries.Zed"
+      }
+    },
+    {
+      "id": "jetbrains-ai",
+      "name": "JetBrains AI Assistant",
+      "category": "AI IDE",
+      "detect": [
+        "%APPDATA%/JetBrains"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/JetBrains",
+          "kind": "config",
+          "note": "AI Assistant and MCP options",
+          "include": [
+            "**/options/*ai*.xml",
+            "**/options/mcp*.xml",
+            "**/options/llm*.xml"
+          ],
+          "max_total_mb": 20
+        }
+      ],
+      "install": {
+        "docs": "https://www.jetbrains.com/ai/"
+      }
+    },
+    {
+      "id": "junie",
+      "name": "JetBrains Junie",
+      "category": "AI IDE",
+      "detect": [
+        "~/.junie"
+      ],
+      "items": [
+        {
+          "path": "~/.junie/mcp",
+          "kind": "config",
+          "note": "MCP servers"
+        },
+        {
+          "path": "~/.junie/guidelines.md",
+          "kind": "prompt"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.junie/mcp/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Junie"
+        }
+      ],
+      "install": {
+        "docs": "https://www.jetbrains.com/junie/"
+      }
+    },
+    {
+      "id": "devin-ide",
+      "name": "Devin",
+      "category": "AI IDE",
+      "detect": [
+        "~/.devin",
+        "%APPDATA%/Devin - Next"
+      ],
+      "items": [
+        {
+          "path": "~/.devin/argv.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Devin - Next/User/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Devin - Next/User/chatLanguageModels.json",
+          "kind": "config"
+        }
+      ],
+      "install": {
+        "url": "https://devin.ai"
+      },
+      "extensions_dir": "~/.devin/extensions"
+    }
+  ]
+}

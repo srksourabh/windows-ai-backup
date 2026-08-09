@@ -121,3 +121,15 @@ def test_deep_destination_path_does_not_abort_the_tree(tmp_path):
     captured = collector.collect_item(Item(str(root), "tree", include=("**/*.md",)))
     copied = [c for c in captured if c.archive]
     assert len(copied) == 5, [c.skipped_reason for c in captured if not c.archive]
+
+
+def test_yaml_dates_do_not_break_the_copy(tmp_path, collector):
+    """TOML and YAML carry native dates that plain json.dumps cannot serialise."""
+    source = tmp_path / "config.yaml"
+    source.write_text("model: opus\nreleased: 2026-08-09\n", encoding="utf-8")
+
+    captured = collector.collect_item(Item(str(source), "config"))
+    assert captured[0].archive is not None, captured[0].skipped_reason
+    stored = json.loads((collector.files_root / captured[0].archive[len("files/"):]).read_text())
+    assert stored["model"] == "opus"
+    assert stored["released"] == "2026-08-09"

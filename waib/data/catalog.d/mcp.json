@@ -1,0 +1,220 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "custom-mcp-workspace",
+      "name": "Custom MCP server workspace",
+      "category": "MCP Server",
+      "detect": [
+        "~/mcp-servers",
+        "~/mcp",
+        "~/.mcp-servers",
+        "~/Documents/mcp-servers"
+      ],
+      "items": [
+        {
+          "path": "~/mcp-servers",
+          "kind": "tree",
+          "note": "Every custom server in the workspace, including ones not currently wired up",
+          "include": [
+            "**/*.js",
+            "**/*.mjs",
+            "**/*.cjs",
+            "**/*.ts",
+            "**/*.py",
+            "**/*.json",
+            "**/*.toml",
+            "**/*.md",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.ps1",
+            "**/*.sh",
+            "**/*.txt",
+            "**/*.env.example",
+            "**/*.lock"
+          ],
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**",
+            "**/*-venv/**",
+            "**/*.venv/**"
+          ],
+          "max_total_mb": 80
+        },
+        {
+          "path": "~/.mcp-servers",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 80
+        },
+        {
+          "path": "~/mcp",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 80
+        }
+      ],
+      "notes": "Source of hand-written MCP servers. Dependencies are rebuilt, never copied."
+    },
+    {
+      "id": "serena",
+      "name": "Serena",
+      "category": "MCP Server",
+      "detect": [
+        "~/.serena",
+        "~/.claude/.serena"
+      ],
+      "items": [
+        {
+          "path": "~/.serena/serena_config.yml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.serena/contexts",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "include": [
+            "**/*.yml",
+            "**/*.yaml"
+          ]
+        },
+        {
+          "path": "~/.serena/modes",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "include": [
+            "**/*.yml",
+            "**/*.yaml"
+          ]
+        },
+        {
+          "path": "~/.claude/.serena",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 20,
+          "note": "Project memories",
+          "include": [
+            "**/*.md",
+            "**/*.yml"
+          ]
+        }
+      ],
+      "install": {
+        "uv": "serena-agent",
+        "docs": "https://github.com/oraios/serena"
+      }
+    },
+    {
+      "id": "mcpm",
+      "name": "mcpm",
+      "category": "MCP Server",
+      "detect": [
+        "~/.config/mcpm"
+      ],
+      "items": [
+        {
+          "path": "~/.config/mcpm/config.json",
+          "kind": "config",
+          "note": "Managed MCP server registry"
+        },
+        {
+          "path": "~/.config/mcpm/profiles.json",
+          "kind": "config"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.config/mcpm/config.json",
+          "fmt": "mcp_servers",
+          "client": "mcpm"
+        }
+      ],
+      "install": {
+        "pipx": "mcpm"
+      }
+    },
+    {
+      "id": "fastmcp",
+      "name": "FastMCP",
+      "category": "MCP Server",
+      "detect": [
+        "~/.fastmcp",
+        "%LOCALAPPDATA%/fastmcp"
+      ],
+      "items": [
+        {
+          "path": "~/.fastmcp",
+          "kind": "config",
+          "include": [
+            "*.json",
+            "*.yaml"
+          ]
+        }
+      ],
+      "install": {
+        "pipx": "fastmcp"
+      }
+    },
+    {
+      "id": "mcp-hub",
+      "name": "MCP Hub",
+      "category": "MCP Server",
+      "detect": [
+        "~/.mcp-hub",
+        "~/.config/mcphub"
+      ],
+      "items": [
+        {
+          "path": "~/.mcp-hub/config.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.config/mcphub/servers.json",
+          "kind": "config"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/.mcp-hub/config.json",
+          "fmt": "mcp_servers",
+          "client": "MCP Hub"
+        }
+      ]
+    }
+  ]
+}

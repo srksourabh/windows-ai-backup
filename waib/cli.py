@@ -9,14 +9,14 @@ from pathlib import Path
 
 from . import licensing
 from . import restore as restore_engine
+from . import catalog_loader, discovery
 from .backup import run_backup
-from .catalog import TARGETS
 from .collect import mcp
 from .paths import expand
 from .secrets_vault import VaultError
 from .util import human_bytes
 
-VERSION = "1.0.0"
+VERSION = "2.0.0"
 BANNER = r"""
  __      __ _         _                   _    ___   ___             _
  \ \    / /(_) _ _  __| | ___ __ __ ___   /_\  |_ _| | _ ) __ _  __ | |__ _  _  _ __
@@ -51,6 +51,24 @@ def cmd_backup(args: argparse.Namespace) -> int:
         print("Already bought it?  WindowsAIBackup.exe activate <key>")
         return 3
 
+    if args.discover and not entitlement.is_premium:
+        print("Discovering uncatalogued tools is a Premium feature.")
+        print(f"Unlock everything for a one-time $1: {licensing.PURCHASE_URL}")
+        return 3
+
+    selected: list[str] | None = None
+    if args.tools:
+        requested = [name for chunk in args.tools for name in chunk.split(",")]
+        selected, unknown = catalog_loader.resolve_ids(requested)
+        if unknown:
+            print(f"Unknown tool(s): {', '.join(unknown)}")
+            print("Run  WindowsAIBackup.exe catalog  to see valid ids.")
+            return 2
+        if not entitlement.is_premium and len(selected) > licensing.DEMO_TOOL_LIMIT:
+            print(f"Demo backs up {licensing.DEMO_TOOL_LIMIT} tools; you asked for {len(selected)}.")
+            print(f"The first {licensing.DEMO_TOOL_LIMIT} will be used. Premium removes the limit:")
+            print(f"  {licensing.PURCHASE_URL}")
+
     passphrase = _passphrase(confirm=True) if args.secrets else None
 
     result = run_backup(
@@ -61,6 +79,8 @@ def cmd_backup(args: argparse.Namespace) -> int:
         keep_folder=not args.zip_only,
         progress=lambda msg: print(msg, flush=True),
         license=entitlement,
+        tools=selected,
+        discover=args.discover,
     )
 
     summary = result["inventory"]["summary"]
@@ -83,13 +103,19 @@ def cmd_backup(args: argparse.Namespace) -> int:
     print("  Read INVENTORY.md for the full what-and-where report.")
     if not args.secrets and entitlement.is_premium:
         print("  Note: credentials were NOT captured. Re-run with --secrets to include them (encrypted).")
+    inventory = result["inventory"]
+    print(f"  Catalog: {inventory.get('catalog_size')} tools known | "
+          f"{inventory.get('tools_present')} present here | "
+          f"{inventory.get('tools_captured')} captured")
     if not entitlement.is_premium:
-        skipped = result["inventory"].get("demo_skipped_tools") or []
+        skipped = inventory.get("demo_skipped_tools") or []
         print("")
-        print(f"  DEMO EDITION — {len(skipped)} other AI tools on this PC were not captured.")
+        print(f"  DEMO EDITION — capped at {licensing.DEMO_TOOL_LIMIT} tools; "
+              f"{len(skipped)} more were found and left out.")
+        print("  Choose which five with:  --tools claude-code,cursor,codex,vscode,ollama")
         for limit in licensing.DEMO_LIMITS[1:]:
             print(f"    - {limit}")
-        print(f"  Unlock everything, one-time $1: {licensing.PURCHASE_URL}")
+        print(f"  Unlimited tools, one-time $1: {licensing.PURCHASE_URL}")
     return 0
 
 
@@ -149,26 +175,32 @@ def cmd_scan(args: argparse.Namespace) -> int:
     entitlement = licensing.load()
     print(BANNER)
     print(f"  Edition: {entitlement.label}")
-    print(f"\nCatalog: {len(TARGETS)} AI tools known\n")
+    catalogue = catalog_loader.targets()
+    print(f"\nCatalog: {len(catalogue)} AI tools known\n")
 
-    found = 0
-    demo_only = 0
-    for target in TARGETS:
+    present = []
+    for target in catalogue:
         root = next((expand(d) for d in target.detect if expand(d).exists()), None)
         if root is None:
             if args.all:
                 print(f"  [ ] {target.name}")
             continue
-        found += 1
-        # Scanning is never limited — you always see the whole picture before buying.
-        premium_only = not entitlement.is_premium and target.id not in licensing.DEMO_TARGET_IDS
-        demo_only += premium_only
-        marker = "  (Premium)" if premium_only else ""
-        print(f"  [x] {target.name:<38} {root}{marker}")
+        present.append(target)
+        # Scanning is never limited — you see the whole picture before deciding to buy.
+        print(f"  [x] {target.name:<38} {root}")
 
-    print(f"\n{found} of {len(TARGETS)} tools present on this machine.")
-    if demo_only:
-        print(f"{demo_only} of them would be skipped by a Demo backup — {licensing.PURCHASE_URL}")
+    print(f"\n{len(present)} of {len(catalogue)} catalogued tools present on this machine.")
+
+    if args.discover:
+        print("\nSearching for AI tools that are not in the catalog...")
+        for found in discovery.scan(discovery.known_roots(catalogue)):
+            print(f"  [?] {found.name:<38} {found.path}")
+            print(f"      score {found.score}: {'; '.join(found.signals[:2])}")
+
+    if not entitlement.is_premium and len(present) > licensing.DEMO_TOOL_LIMIT:
+        extra = len(present) - licensing.DEMO_TOOL_LIMIT
+        print(f"\nDemo captures {licensing.DEMO_TOOL_LIMIT} of these; {extra} would be left out.")
+        print(f"Premium removes the limit: {licensing.PURCHASE_URL}")
 
     registry = mcp.build_registry()
     print(f"\nMCP servers: {registry['server_count']}")
@@ -176,6 +208,80 @@ def cmd_scan(args: argparse.Namespace) -> int:
         where = server.get("url") or f"{server.get('command')} {' '.join(map(str, server.get('args') or []))}".strip()
         print(f"  - {server['name']:<28} {where[:70]}")
         print(f"    used by: {', '.join(server['clients'])}")
+    return 0
+
+
+def cmd_catalog(args: argparse.Namespace) -> int:
+    """List, validate, or extend the tool catalog."""
+    if args.where:
+        print("Catalog files, in load order (later files override earlier ids):")
+        print("")
+        for path in catalog_loader.catalog_files():
+            print(f"  {path}")
+        print("")
+        print("Drop your own JSON into:")
+        print(f"  {expand(catalog_loader.USER_LOCAL_CATALOG_DIR)}")
+        return 0
+
+    if args.validate:
+        try:
+            loaded, issues = catalog_loader.load_targets(strict=False)
+        except catalog_loader.CatalogError as exc:
+            print(f"invalid: {exc}")
+            return 2
+        print(f"{len(loaded)} tools loaded from {len(catalog_loader.catalog_files())} file(s).")
+        if issues:
+            print("")
+            print(f"{len(issues)} problem(s):")
+            for issue in issues:
+                print(f"  - {issue}")
+            return 1
+        print("No problems found.")
+        return 0
+
+    catalogue = catalog_loader.targets()
+    if args.json:
+        print(json.dumps([{"id": t.id, "name": t.name, "category": t.category,
+                           "detect": list(t.detect), "items": len(t.items)}
+                          for t in catalogue], indent=2))
+        return 0
+
+    grouped = catalog_loader.categories()
+    for category in sorted(grouped):
+        entries = grouped[category]
+        print("")
+        print(f"{category}  ({len(entries)})")
+        for target in entries:
+            here = any(expand(d).exists() for d in target.detect)
+            print(f"  {'*' if here else ' '} {target.id:<26} {target.name}")
+    print("")
+    print(f"{len(catalogue)} tools in the catalog. '*' marks tools present on this machine.")
+    print("Use ids with:  backup --tools <id>,<id>")
+    for warning in catalog_loader.warnings():
+        print(f"  [warn] {warning}")
+    return 0
+
+
+def cmd_discover(args: argparse.Namespace) -> int:
+    """Report AI tools the catalog does not know about yet."""
+    catalogue = catalog_loader.targets()
+    found = discovery.scan(discovery.known_roots(catalogue))
+    if args.json:
+        print(json.dumps([{"name": d.name, "path": d.path, "score": d.score,
+                           "signals": list(d.signals), "mcp_files": list(d.mcp_files),
+                           "instruction_files": list(d.instruction_files)} for d in found], indent=2))
+        return 0
+
+    print(f"{len(found)} AI tool(s) found that are not in the catalog of {len(catalogue)}:")
+    print("")
+    for d in found:
+        print(f"  {d.name}")
+        print(f"    path   : {d.path}")
+        print(f"    score  : {d.score}")
+        print(f"    signals: {'; '.join(d.signals[:3])}")
+        print("")
+    if found:
+        print("Include these in a backup with:  backup --discover   (Premium)")
     return 0
 
 
@@ -259,11 +365,28 @@ def build_parser() -> argparse.ArgumentParser:
                             help="Include credentials in an encrypted vault (prompts for a passphrase)")
     backup_cmd.add_argument("--no-zip", action="store_true", help="Leave the folder uncompressed")
     backup_cmd.add_argument("--zip-only", action="store_true", help="Delete the folder after zipping")
+    backup_cmd.add_argument("--tools", action="append", metavar="IDS",
+                            help="Only these tools (comma-separated ids; repeatable). "
+                                 "Demo uses this to choose which 5 to capture.")
+    backup_cmd.add_argument("--discover", action="store_true",
+                            help="Also capture AI tools not yet in the catalog (Premium)")
     backup_cmd.set_defaults(func=cmd_backup)
 
     scan_cmd = sub.add_parser("scan", help="Show what would be backed up, without writing anything")
     scan_cmd.add_argument("--all", action="store_true", help="Also list tools that are not installed")
+    scan_cmd.add_argument("--discover", action="store_true",
+                          help="Also search for tools missing from the catalog")
     scan_cmd.set_defaults(func=cmd_scan)
+
+    catalog_cmd = sub.add_parser("catalog", help="List the tool catalog, or validate and extend it")
+    catalog_cmd.add_argument("--json", action="store_true", help="Emit JSON")
+    catalog_cmd.add_argument("--validate", action="store_true", help="Check every catalog file parses")
+    catalog_cmd.add_argument("--where", action="store_true", help="Show which files the catalog loads from")
+    catalog_cmd.set_defaults(func=cmd_catalog)
+
+    discover_cmd = sub.add_parser("discover", help="Find AI tools that are not in the catalog")
+    discover_cmd.add_argument("--json", action="store_true", help="Emit JSON")
+    discover_cmd.set_defaults(func=cmd_discover)
 
     mcp_cmd = sub.add_parser("mcp", help="Print the unified MCP server registry")
     mcp_cmd.add_argument("--json", action="store_true", help="Emit JSON")

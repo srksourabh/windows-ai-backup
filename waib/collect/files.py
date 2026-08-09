@@ -72,7 +72,9 @@ class FileCollector:
             parsed = load_structured(source)
             if parsed is not None:
                 clean, found = redact(parsed)
-                safe_write_text(dest, json.dumps(clean, indent=2, ensure_ascii=False))
+                # default=str: TOML and YAML carry native dates and times that
+                # json.dumps cannot serialise on its own.
+                safe_write_text(dest, json.dumps(clean, indent=2, ensure_ascii=False, default=str))
                 redactions.extend(found)
                 if found and self.capture_secrets:
                     secrets = extract_secrets(parsed)

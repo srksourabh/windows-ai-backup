@@ -1,0 +1,171 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "langsmith",
+      "name": "LangSmith / LangChain",
+      "category": "LLM Ops",
+      "detect": [
+        "~/.langchain",
+        "~/.langsmith"
+      ],
+      "items": [
+        {
+          "path": "~/.langchain",
+          "kind": "config",
+          "include": [
+            "*.json",
+            "*.yaml"
+          ]
+        },
+        {
+          "path": "~/.langsmith/credentials",
+          "kind": "secret"
+        }
+      ],
+      "install": {
+        "docs": "https://docs.smith.langchain.com"
+      }
+    },
+    {
+      "id": "langfuse",
+      "name": "Langfuse",
+      "category": "LLM Ops",
+      "detect": [
+        "~/.langfuse"
+      ],
+      "items": [
+        {
+          "path": "~/.langfuse",
+          "kind": "config",
+          "include": [
+            "*.json",
+            "*.yaml"
+          ]
+        }
+      ],
+      "install": {
+        "docs": "https://langfuse.com/docs"
+      }
+    },
+    {
+      "id": "wandb",
+      "name": "Weights & Biases",
+      "category": "LLM Ops",
+      "detect": [
+        "~/.config/wandb",
+        "~/.netrc"
+      ],
+      "items": [
+        {
+          "path": "~/.config/wandb/settings",
+          "kind": "config",
+          "note": "Default entity and project"
+        },
+        {
+          "path": "~/.netrc",
+          "kind": "secret",
+          "note": "Contains the W&B API key"
+        }
+      ],
+      "install": {
+        "pipx": "wandb"
+      }
+    },
+    {
+      "id": "mlflow",
+      "name": "MLflow",
+      "category": "LLM Ops",
+      "detect": [
+        "~/.mlflow"
+      ],
+      "items": [
+        {
+          "path": "~/.mlflow/credentials",
+          "kind": "config"
+        }
+      ],
+      "install": {
+        "pipx": "mlflow"
+      }
+    },
+    {
+      "id": "promptfoo",
+      "name": "promptfoo",
+      "category": "LLM Ops",
+      "detect": [
+        "~/.promptfoo"
+      ],
+      "items": [
+        {
+          "path": "~/.promptfoo/promptfoo.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.promptfoo/prompts",
+          "kind": "prompt",
+          "include": [
+            "**/*.md",
+            "**/*.txt",
+            "**/*.mdc",
+            "**/*.prompt"
+          ]
+        }
+      ],
+      "install": {
+        "npm": "promptfoo"
+      }
+    },
+    {
+      "id": "huggingface-cli",
+      "name": "Hugging Face CLI",
+      "category": "LLM Ops",
+      "detect": [
+        "~/.cache/huggingface",
+        "~/.huggingface",
+        "~/.hf-cli"
+      ],
+      "items": [
+        {
+          "path": "~/.cache/huggingface/accelerate/default_config.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.cache/huggingface/token",
+          "kind": "secret",
+          "note": "Hugging Face access token"
+        },
+        {
+          "path": "~/.cache/huggingface/stored_tokens",
+          "kind": "secret"
+        },
+        {
+          "path": "~/.hf-cli",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.yml",
+            "**/*.toml"
+          ]
+        },
+        {
+          "path": "~/.cache/huggingface/hub",
+          "kind": "record",
+          "note": "Downloaded model weights"
+        }
+      ],
+      "install": {
+        "pipx": "huggingface_hub[cli]"
+      }
+    }
+  ]
+}

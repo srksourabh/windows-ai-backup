@@ -1,0 +1,278 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "claude-desktop",
+      "name": "Claude Desktop",
+      "category": "Desktop App",
+      "detect": [
+        "%APPDATA%/Claude",
+        "~/.claude/claude_desktop_config.json"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Claude/claude_desktop_config.json",
+          "kind": "config",
+          "note": "MCP servers for the desktop app"
+        },
+        {
+          "path": "%APPDATA%/Claude/config.json",
+          "kind": "config"
+        },
+        {
+          "path": "%APPDATA%/Claude/window-state.json",
+          "kind": "record"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "%APPDATA%/Claude/claude_desktop_config.json",
+          "fmt": "mcp_servers",
+          "client": "Claude Desktop"
+        },
+        {
+          "path": "~/.claude/claude_desktop_config.json",
+          "fmt": "mcp_servers",
+          "client": "Claude Desktop"
+        }
+      ],
+      "install": {
+        "winget": "Anthropic.Claude",
+        "url": "https://claude.ai/download"
+      }
+    },
+    {
+      "id": "chatgpt-desktop",
+      "name": "ChatGPT Desktop",
+      "category": "Desktop App",
+      "detect": [
+        "%LOCALAPPDATA%/OpenAI"
+      ],
+      "items": [
+        {
+          "path": "%LOCALAPPDATA%/OpenAI",
+          "kind": "config",
+          "include": [
+            "**/*.json"
+          ],
+          "max_total_mb": 10
+        },
+        {
+          "path": "%LOCALAPPDATA%/OpenAI",
+          "kind": "record",
+          "note": "Cached app payloads"
+        }
+      ],
+      "install": {
+        "url": "https://openai.com/chatgpt/download"
+      }
+    },
+    {
+      "id": "perplexity-desktop",
+      "name": "Perplexity",
+      "category": "Desktop App",
+      "detect": [
+        "%LOCALAPPDATA%/Perplexity",
+        "%APPDATA%/Perplexity"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Perplexity",
+          "kind": "config",
+          "include": [
+            "*.json"
+          ]
+        }
+      ],
+      "install": {
+        "url": "https://www.perplexity.ai/download"
+      }
+    },
+    {
+      "id": "chatbox",
+      "name": "Chatbox",
+      "category": "Desktop App",
+      "detect": [
+        "%APPDATA%/xyz.chatboxapp.app"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/xyz.chatboxapp.app",
+          "kind": "config",
+          "include": [
+            "config.json",
+            "settings*.json"
+          ]
+        }
+      ],
+      "install": {
+        "url": "https://chatboxai.app"
+      }
+    },
+    {
+      "id": "cherry-studio",
+      "name": "Cherry Studio",
+      "category": "Desktop App",
+      "detect": [
+        "%APPDATA%/CherryStudio"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/CherryStudio/Data",
+          "kind": "config",
+          "note": "Providers, assistants, MCP servers",
+          "include": [
+            "**/*.json"
+          ],
+          "max_total_mb": 20
+        },
+        {
+          "path": "%APPDATA%/CherryStudio/Data/KnowledgeBase",
+          "kind": "record",
+          "note": "Vector index"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "%APPDATA%/CherryStudio/Data/mcp.json",
+          "fmt": "mcp_servers",
+          "client": "Cherry Studio"
+        }
+      ],
+      "install": {
+        "url": "https://cherry-ai.com"
+      }
+    },
+    {
+      "id": "lobe-chat",
+      "name": "LobeChat",
+      "category": "Desktop App",
+      "detect": [
+        "%APPDATA%/LobeHub",
+        "%APPDATA%/lobehub"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/LobeHub",
+          "kind": "config",
+          "include": [
+            "**/*.json"
+          ],
+          "max_total_mb": 20
+        }
+      ],
+      "install": {
+        "docs": "https://lobehub.com"
+      }
+    },
+    {
+      "id": "librechat",
+      "name": "LibreChat",
+      "category": "Desktop App",
+      "detect": [
+        "~/LibreChat/librechat.yaml"
+      ],
+      "items": [
+        {
+          "path": "~/LibreChat/librechat.yaml",
+          "kind": "config",
+          "note": "Endpoints, models, MCP servers"
+        }
+      ],
+      "mcp_sources": [
+        {
+          "path": "~/LibreChat/librechat.yaml",
+          "fmt": "yaml_mcp",
+          "client": "LibreChat"
+        }
+      ],
+      "install": {
+        "docs": "https://www.librechat.ai"
+      }
+    },
+    {
+      "id": "typingmind",
+      "name": "TypingMind",
+      "category": "Desktop App",
+      "detect": [
+        "%APPDATA%/TypingMind"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/TypingMind",
+          "kind": "config",
+          "include": [
+            "*.json"
+          ]
+        }
+      ],
+      "install": {
+        "url": "https://www.typingmind.com"
+      }
+    },
+    {
+      "id": "wispr-flow",
+      "name": "Wispr Flow",
+      "category": "Desktop App",
+      "detect": [
+        "%APPDATA%/Wispr Flow",
+        "%LOCALAPPDATA%/WisprFlow"
+      ],
+      "items": [
+        {
+          "path": "%APPDATA%/Wispr Flow",
+          "kind": "config",
+          "include": [
+            "*.json"
+          ]
+        },
+        {
+          "path": "%APPDATA%/Wispr Flow/dictionary",
+          "kind": "prompt",
+          "note": "Custom vocabulary",
+          "include": [
+            "**/*.json",
+            "**/*.txt"
+          ]
+        }
+      ],
+      "install": {
+        "url": "https://wisprflow.ai"
+      }
+    },
+    {
+      "id": "superwhisper",
+      "name": "Superwhisper",
+      "category": "Desktop App",
+      "detect": [
+        "~/Documents/superwhisper"
+      ],
+      "items": [
+        {
+          "path": "~/Documents/superwhisper/modes",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Custom modes",
+          "include": [
+            "**/*.json"
+          ]
+        },
+        {
+          "path": "~/Documents/superwhisper/models",
+          "kind": "record",
+          "note": "Speech model weights"
+        }
+      ],
+      "install": {
+        "url": "https://superwhisper.com"
+      }
+    }
+  ]
+}

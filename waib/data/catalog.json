@@ -1,0 +1,5 @@
+{
+  "catalog_version": 1,
+  "note": "Shipped tools live in catalog.d/. This file is a seed for overrides.",
+  "tools": []
+}

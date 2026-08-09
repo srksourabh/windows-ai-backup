@@ -1,0 +1,126 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "misc-ai-tools",
+      "name": "Assorted AI tools",
+      "category": "Assorted",
+      "detect": [
+        "~/.mem0",
+        "~/.n8n-mcp",
+        "~/.kimi-code",
+        "~/.devin",
+        "~/.gsd",
+        "~/.omniroute",
+        "~/.cagent",
+        "~/.qodo",
+        "~/.kilocode",
+        "~/.clawhub",
+        "~/.council-of-mine",
+        "~/.aitk",
+        "~/.hf-cli"
+      ],
+      "items": [
+        {
+          "path": "~/.mem0/config.json",
+          "kind": "config",
+          "note": "mem0 memory layer"
+        },
+        {
+          "path": "~/.n8n-mcp/telemetry.json",
+          "kind": "record"
+        },
+        {
+          "path": "~/.kimi-code/migrations-effort.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.kimi-code/credentials",
+          "kind": "secret"
+        },
+        {
+          "path": "~/.devin/argv.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.gsd/agent",
+          "kind": "tree",
+          "note": "get-shit-done agent config",
+          "include": [
+            "**/*.json",
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.omniroute/.env",
+          "kind": "secret",
+          "note": "OmniRoute provider keys"
+        },
+        {
+          "path": "~/.omniroute/server",
+          "kind": "tree",
+          "note": "Router config",
+          "include": [
+            "**/*.json",
+            "**/*.yaml"
+          ],
+          "max_total_mb": 20
+        },
+        {
+          "path": "~/.cagent/models_dev.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.qodo",
+          "kind": "tree",
+          "include": [
+            "**/*.json",
+            "**/*.yaml",
+            "**/*.md"
+          ],
+          "max_total_mb": 20
+        },
+        {
+          "path": "~/.kilocode",
+          "kind": "tree",
+          "include": [
+            "**/*.json",
+            "**/*.md"
+          ],
+          "max_total_mb": 20
+        },
+        {
+          "path": "~/.clawhub/lock.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.aitk",
+          "kind": "tree",
+          "note": "AI Toolkit for VS Code",
+          "include": [
+            "**/*.json"
+          ],
+          "max_total_mb": 20
+        },
+        {
+          "path": "~/.hf-cli",
+          "kind": "tree",
+          "note": "Hugging Face CLI",
+          "include": [
+            "**/*.json",
+            "**/*.yaml"
+          ]
+        },
+        {
+          "path": "~/.cache/huggingface/token",
+          "kind": "secret",
+          "note": "Hugging Face token"
+        },
+        {
+          "path": "~/.copilot/config.json",
+          "kind": "config"
+        }
+      ]
+    }
+  ]
+}

@@ -10,11 +10,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from . import licensing, manifest, restore_script
-from .catalog import TARGETS
+from . import catalog_loader, discovery, licensing, manifest, restore_script
 from .collect import envvars, extensions, identity, localservers, mcp, models, packages, plugins
 from .collect.files import FileCollector
+from .discovery import Discovery
 from .licensing import License
+from .paths import expand
 from .model import TargetResult
 from .scrub import scrub_text
 from .secrets_vault import seal
@@ -73,8 +74,14 @@ def run_backup(
     keep_folder: bool = True,
     progress: Progress = print,
     license: License | None = None,
+    tools: list[str] | None = None,
+    discover: bool = False,
 ) -> dict[str, Any]:
-    """Produce a backup folder (and optionally a .zip) at ``destination``."""
+    """Produce a backup folder (and optionally a .zip) at ``destination``.
+
+    ``tools`` restricts the run to specific catalog ids. ``discover`` adds AI
+    tools found heuristically that the catalog does not list yet.
+    """
     entitlement = license or licensing.load()
 
     if capture_secrets and not entitlement.is_premium:
@@ -91,18 +98,35 @@ def run_backup(
 
     collector = FileCollector(out_dir, capture_secrets)
 
-    progress(f"Scanning AI tools...  [{entitlement.label}]")
+    catalogue = catalog_loader.targets()
+    progress(f"Scanning {len(catalogue)} known AI tools...  [{entitlement.label}]")
+
+    present = [t for t in catalogue if any(expand(d).exists() for d in t.detect)]
+    discovered: list[Discovery] = []
+
+    if discover and entitlement.is_premium:
+        progress("Looking for AI tools not in the catalog...")
+        discovered = discovery.scan(discovery.known_roots(catalogue))
+        for found in discovered:
+            present.append(discovery.to_target(found))
+        progress(f"  [+] {len(discovered)} uncatalogued tool(s) found")
+
+    present_ids = [t.id for t in present]
+    if entitlement.is_premium:
+        selected_ids = [t for t in present_ids if not tools or t in tools]
+    else:
+        selected_ids = licensing.demo_selection(present_ids, tools)
+
+    skipped_targets = [t.name for t in present if t.id not in selected_ids]
+
     results: list[TargetResult] = []
-    skipped_targets: list[str] = []
-    for target in TARGETS:
-        if not entitlement.is_premium and target.id not in licensing.DEMO_TARGET_IDS:
-            skipped_targets.append(target.name)
+    for target in present:
+        if target.id not in selected_ids:
             continue
         result = collector.collect_target(target)
         results.append(result)
-        if result.present:
-            copied = len([f for f in result.files if f.archive])
-            progress(f"  [+] {result.name}: {copied} file(s)")
+        copied = len([f for f in result.files if f.archive])
+        progress(f"  [+] {result.name}: {copied} file(s)")
 
     progress("Building MCP server registry...")
     mcp_registry = mcp.build_registry()
@@ -149,6 +173,16 @@ def run_backup(
         "extensions": extension_registry,
         "identity": identity_registry,
         "env": env_registry,
+        "discovered": {
+            "count": len(discovered),
+            "note": "AI tools found heuristically that the catalog does not list yet.",
+            "tools": [
+                {"name": d.name, "path": d.path, "score": d.score,
+                 "signals": list(d.signals), "mcp_files": list(d.mcp_files),
+                 "instruction_files": list(d.instruction_files)}
+                for d in discovered
+            ],
+        },
     }
 
     # Registries are assembled from many parsers; a credential that slipped past
@@ -165,13 +199,21 @@ def run_backup(
 
     meta = _meta(capture_secrets)
     meta["edition"] = entitlement.edition.value
+    meta["catalog_size"] = len(catalogue)
+    meta["tools_present"] = len(present)
+    meta["tools_captured"] = len(selected_ids)
+    meta["discovered_tools"] = [
+        {"name": d.name, "path": d.path, "score": d.score, "signals": list(d.signals)}
+        for d in discovered
+    ]
     meta["licensed_to"] = entitlement.name or entitlement.email
     if skipped_targets:
         meta["demo_skipped_tools"] = sorted(skipped_targets)
         meta["demo_notice"] = (
-            f"Demo edition: {len(skipped_targets)} tools were not captured, and no "
-            f"credential vault or custom MCP server source was included. "
-            f"Unlock everything for a one-time $1 — {licensing.PURCHASE_URL}"
+            f"Demo edition captures {licensing.DEMO_TOOL_LIMIT} tools; "
+            f"{len(skipped_targets)} more were found on this machine and left out, "
+            f"along with the credential vault and custom MCP server source. "
+            f"Unlock unlimited tools for a one-time $1 — {licensing.PURCHASE_URL}"
         )
 
     inventory = manifest.build(results, registries, meta)

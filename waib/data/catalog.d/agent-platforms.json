@@ -1,0 +1,306 @@
+{
+  "catalog_version": 1,
+  "tools": [
+    {
+      "id": "openclaw",
+      "name": "OpenClaw",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.openclaw"
+      ],
+      "items": [
+        {
+          "path": "~/.openclaw/openclaw.json",
+          "kind": "config",
+          "note": "Gateway, channels, model routing"
+        },
+        {
+          "path": "~/.openclaw/skills",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Skills"
+        },
+        {
+          "path": "~/.openclaw/agents",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "include": [
+            "**/*.md",
+            "**/*.json"
+          ]
+        }
+      ],
+      "install": {
+        "docs": "https://docs.openclaw.ai"
+      }
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.n8n"
+      ],
+      "items": [
+        {
+          "path": "~/.n8n/config",
+          "kind": "config",
+          "note": "Instance settings"
+        },
+        {
+          "path": "~/.n8n/database.sqlite",
+          "kind": "record",
+          "note": "Workflow database — export workflows instead"
+        },
+        {
+          "path": "~/.n8n/nodes",
+          "kind": "record",
+          "note": "Community nodes — reinstalled by name"
+        }
+      ],
+      "install": {
+        "npm": "n8n",
+        "docs": "https://docs.n8n.io"
+      }
+    },
+    {
+      "id": "flowise",
+      "name": "Flowise",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.flowise"
+      ],
+      "items": [
+        {
+          "path": "~/.flowise/.env",
+          "kind": "config"
+        },
+        {
+          "path": "~/.flowise/database.sqlite",
+          "kind": "record",
+          "note": "Chatflow database — export chatflows instead"
+        }
+      ],
+      "install": {
+        "npm": "flowise"
+      }
+    },
+    {
+      "id": "langflow",
+      "name": "Langflow",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.langflow"
+      ],
+      "items": [
+        {
+          "path": "~/.langflow/settings.yaml",
+          "kind": "config"
+        },
+        {
+          "path": "~/.langflow/langflow.db",
+          "kind": "record",
+          "note": "Flow database"
+        }
+      ],
+      "install": {
+        "pipx": "langflow"
+      }
+    },
+    {
+      "id": "dify",
+      "name": "Dify",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.dify"
+      ],
+      "items": [
+        {
+          "path": "~/.dify",
+          "kind": "config",
+          "include": [
+            "*.yaml",
+            "*.env",
+            "*.json"
+          ]
+        }
+      ],
+      "install": {
+        "docs": "https://docs.dify.ai"
+      }
+    },
+    {
+      "id": "crewai",
+      "name": "CrewAI",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.crewai",
+        "~/.config/crewai"
+      ],
+      "items": [
+        {
+          "path": "~/.crewai",
+          "kind": "config",
+          "include": [
+            "*.json",
+            "*.yaml"
+          ]
+        },
+        {
+          "path": "~/.config/crewai",
+          "kind": "config",
+          "include": [
+            "*.json",
+            "*.yaml"
+          ]
+        }
+      ],
+      "install": {
+        "pipx": "crewai"
+      }
+    },
+    {
+      "id": "letta",
+      "name": "Letta (MemGPT)",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.letta",
+        "~/.memgpt"
+      ],
+      "items": [
+        {
+          "path": "~/.letta/config",
+          "kind": "config"
+        },
+        {
+          "path": "~/.memgpt/config",
+          "kind": "config"
+        },
+        {
+          "path": "~/.letta/sqlite.db",
+          "kind": "record",
+          "note": "Agent memory database"
+        }
+      ],
+      "install": {
+        "pipx": "letta"
+      }
+    },
+    {
+      "id": "mem0",
+      "name": "mem0",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.mem0"
+      ],
+      "items": [
+        {
+          "path": "~/.mem0/config.json",
+          "kind": "config",
+          "note": "Memory layer configuration"
+        }
+      ],
+      "install": {
+        "pipx": "mem0ai"
+      }
+    },
+    {
+      "id": "claude-mem",
+      "name": "claude-mem",
+      "category": "Agent Platform",
+      "detect": [
+        "~/.claude-mem"
+      ],
+      "items": [
+        {
+          "path": "~/.claude-mem/settings.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/.claude-mem/claude-mem.db",
+          "kind": "record",
+          "note": "Memory database — rebuilt from transcripts"
+        },
+        {
+          "path": "~/.claude-mem/chroma",
+          "kind": "record",
+          "note": "Vector index"
+        }
+      ],
+      "install": {
+        "npm": "claude-mem"
+      }
+    },
+    {
+      "id": "agent-dirs",
+      "name": "Portable agent directories",
+      "category": "Cross-tool Standard",
+      "detect": [
+        "~/.agent",
+        "~/.agents",
+        "~/AGENTS.md"
+      ],
+      "items": [
+        {
+          "path": "~/.agent/rules",
+          "kind": "prompt",
+          "include": [
+            "**/*.md"
+          ]
+        },
+        {
+          "path": "~/.agent/skills",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Skills"
+        },
+        {
+          "path": "~/.agents/skills",
+          "kind": "tree",
+          "exclude": [
+            "**/node_modules/**",
+            "**/.git/**",
+            "**/__pycache__/**",
+            "**/*.log",
+            "**/cache/**"
+          ],
+          "max_total_mb": 60,
+          "note": "Skills"
+        },
+        {
+          "path": "~/.agents/.skill-lock.json",
+          "kind": "config"
+        },
+        {
+          "path": "~/AGENTS.md",
+          "kind": "prompt",
+          "note": "Cross-tool master prompt"
+        }
+      ],
+      "install": {
+        "docs": "https://agents.md"
+      }
+    }
+  ]
+}

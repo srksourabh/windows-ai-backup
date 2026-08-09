@@ -7,9 +7,23 @@ restore does with each piece.
 
 ## 1. Discovery
 
-The catalog in [`waib/catalog.py`](waib/catalog.py) declares 25 targets. Each names
+The catalog is **data, not code**: JSON files under
+[`waib/data/catalog.d/`](waib/data/catalog.d) declaring 87 tools. Each entry names
 the paths that prove the tool is installed, the artifacts worth preserving, the MCP
 config dialects it uses, and how to obtain the tool again.
+
+Four sources merge, later ones overriding earlier ids:
+
+| Source | Purpose |
+|---|---|
+| `waib/data/catalog.json` | Seed file for overrides |
+| `waib/data/catalog.d/*.json` | The 87 shipped tools, split by category |
+| `%APPDATA%\WindowsAIBackup\catalog\*.json` | Catalog updates, no new build needed |
+| `%APPDATA%\WindowsAIBackup\catalog.local\*.json` | Your own in-house tools |
+
+Because later files win, a user can correct a shipped entry without editing the
+install. A malformed file is reported by `catalog --validate` and skipped — it can
+never take the rest of the catalog down with it.
 
 ```mermaid
 flowchart LR
@@ -32,35 +46,79 @@ flowchart LR
 
 | Category | Tools |
 |---|---|
-| **Agent CLIs** | Claude Code, OpenAI Codex, Gemini CLI, GitHub Copilot CLI, Cline, Aider, OpenCode, Goose, Amazon Q Developer |
-| **AI IDEs** | Cursor, VS Code, VS Code Insiders, Windsurf, Google Antigravity, Zed, JetBrains Junie, Continue |
-| **Local inference** | Ollama, LM Studio |
-| **Desktop apps** | Claude Desktop |
-| **MCP** | Custom MCP server workspace, Serena |
-| **Platforms & add-ons** | OpenClaw, claude-mem, portable `.agent` / `.agents` / `AGENTS.md` |
+| **Agent CLIs** (24) | Claude Code, OpenAI Codex, Gemini CLI, GitHub Copilot CLI, Cline, Aider, OpenCode, Goose, Amazon Q, Qodo, Kilo Code, Crush, Plandex, OpenHands, Factory Droid, Amp, Codebuff, gptme, ShellGPT, aichat, mods, fabric, llm, Continue |
+| **AI IDEs** (13) | Cursor, VS Code, VS Code Insiders, Windsurf, Antigravity, Zed, Kiro, Trae, Void, PearAI, JetBrains AI Assistant, Junie, Devin |
+| **Local inference** (12) | Ollama, LM Studio, Jan, GPT4All, Msty, AnythingLLM, Open WebUI, KoboldCpp, SillyTavern, text-generation-webui, LocalAI, RamaLama |
+| **Desktop apps** (10) | Claude Desktop, ChatGPT, Perplexity, Chatbox, Cherry Studio, LobeChat, LibreChat, TypingMind, Wispr Flow, Superwhisper |
+| **Agent platforms** (9) | OpenClaw, n8n, Flowise, Langflow, Dify, CrewAI, Letta, mem0, claude-mem |
+| **IDE extensions** (6) | Continue, Tabnine, Supermaven, Augment, Sourcegraph Cody, Codeium |
+| **LLM Ops** (6) | LangSmith, Langfuse, Weights & Biases, MLflow, promptfoo, Hugging Face CLI |
+| **MCP** (5) | Custom MCP workspace, Serena, mcpm, FastMCP, MCP Hub |
+
+Plus **heuristic discovery** for everything not on that list — see section 1b.
 
 ### Adding a tool
 
-```python
-MY_TOOL = Target(
-    id="my-tool",
-    name="My AI Tool",
-    category="Agent CLI",
-    detect=("~/.mytool",),
-    install=Install(npm="my-tool", docs="https://…"),
-    items=(
-        Item("~/.mytool/config.json", "config", "Model and provider settings"),
-        Item("~/.mytool/PROMPT.md",   "prompt", "Global master prompt"),
-        Item("~/.mytool/skills",      "tree",   include=("**/*.md",)),
-        Item("~/.mytool/auth.json",   "secret", "API credentials"),
-        Item("~/.mytool/cache",       "record", "Re-downloadable"),
-    ),
-    mcp_sources=(McpSource("~/.mytool/config.json", "mcp_servers", "My AI Tool"),),
-)
+One JSON object, in any catalog file:
+
+```json
+{
+  "id": "my-tool",
+  "name": "My AI Tool",
+  "category": "Agent CLI",
+  "detect": ["~/.mytool"],
+  "install": { "npm": "my-tool", "docs": "https://…" },
+  "items": [
+    { "path": "~/.mytool/config.json", "kind": "config", "note": "Model and provider settings" },
+    { "path": "~/.mytool/PROMPT.md",   "kind": "prompt", "note": "Global master prompt" },
+    { "path": "~/.mytool/skills",      "kind": "tree",   "include": ["**/*.md"] },
+    { "path": "~/.mytool/auth.json",   "kind": "secret", "note": "API credentials" },
+    { "path": "~/.mytool/cache",       "kind": "record", "note": "Re-downloadable" }
+  ],
+  "mcp_sources": [
+    { "path": "~/.mytool/config.json", "fmt": "mcp_servers", "client": "My AI Tool" }
+  ]
+}
 ```
 
-Append it to `TARGETS`. Scanner, collectors, inventory and restore pick it up
-automatically — no other file changes.
+Scanner, collectors, inventory and restore pick it up automatically — **no code
+changes and no rebuild**. Users add their own without waiting for a release:
+
+```powershell
+notepad $env:APPDATA\WindowsAIBackup\catalog.local\mytool.json
+WindowsAIBackup.exe catalog --validate
+```
+
+## 1b. Discovery — tools nobody catalogued
+
+Discovery inspects every directory under `~`, `%APPDATA%` and `%LOCALAPPDATA%`,
+scores the evidence, and offers anything above the threshold as a synthetic tool.
+
+| Signal | Score |
+|---|---:|
+| A file declares MCP servers | +4 |
+| An MCP-named config file | +2 |
+| `AGENTS.md` / `CLAUDE.md` / `.cursorrules` / `SKILL.md` | +3 |
+| Directory name matches a known AI vendor | +3 |
+| Directory name weakly hints at AI (`ai`, `chat`, `bot`) | +1 |
+| Settings name a model, provider or API key | +1 |
+
+Threshold is 3, so one vague signal is never enough. Deliberately excluded:
+
+* **Git repos and npm packages** — an `AGENTS.md` in a repo is project context,
+  not a tool whose settings need restoring.
+* **Editor extension stores** (`.vscode`, `.cursor`, `.windsurf`) — extensions are
+  already recorded by id, and their payloads re-download.
+* **Cloud sync roots** (Dropbox, OneDrive, Google Drive) — someone else's files.
+
+A discovered tool is captured **precisely**: the files that earned the score, plus
+settings at the top two levels, capped at 5 MB. Sweeping an unknown directory
+recursively is exactly the bloat this tool exists to avoid.
+
+```powershell
+WindowsAIBackup.exe discover           # free — see what it finds
+WindowsAIBackup.exe backup --discover  # Premium — capture them too
+```
 
 ---
 

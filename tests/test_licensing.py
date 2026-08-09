@@ -90,12 +90,36 @@ def test_bad_key_is_not_written_to_disk(publisher, tmp_path, monkeypatch):
     assert not licensing.license_file().exists()
 
 
-def test_demo_covers_the_most_common_tools():
-    from waib.catalog import TARGETS
+def test_demo_preference_list_references_real_catalog_ids():
+    from waib import catalog_loader
 
-    known = {t.id for t in TARGETS}
-    assert licensing.DEMO_TARGET_IDS <= known, "demo list references an unknown target id"
-    assert "claude-code" in licensing.DEMO_TARGET_IDS
+    known = {t.id for t in catalog_loader.targets()}
+    unknown = [t for t in licensing.DEMO_PREFERRED_ORDER if t not in known]
+    assert unknown == [], f"preferred demo tools missing from the catalog: {unknown}"
+
+
+def test_demo_selection_honours_an_explicit_choice():
+    present = ["ollama", "vscode", "aider", "claude-code", "zed", "goose", "jan"]
+    chosen = licensing.demo_selection(present, ["zed", "jan", "aider"])
+    assert chosen == ["zed", "jan", "aider"]
+
+
+def test_demo_selection_caps_at_the_limit():
+    present = [f"tool-{i}" for i in range(20)]
+    chosen = licensing.demo_selection(present, present)
+    assert len(chosen) == licensing.DEMO_TOOL_LIMIT
+
+
+def test_demo_selection_ignores_tools_that_are_not_installed():
+    chosen = licensing.demo_selection(["ollama"], ["zed", "ollama"])
+    assert chosen == ["ollama"]
+
+
+def test_demo_selection_falls_back_to_the_preferred_order():
+    present = ["zzz-unknown", "cursor", "claude-code"]
+    chosen = licensing.demo_selection(present)
+    assert chosen[:2] == ["claude-code", "cursor"]
+    assert len(chosen) == 3
 
 
 def test_secrets_are_refused_without_premium(tmp_path, monkeypatch):
@@ -113,7 +137,8 @@ def demo_backup(tmp_path_factory):
     from waib.backup import run_backup
 
     return run_backup(tmp_path_factory.mktemp("demo"), make_zip=False,
-                      progress=lambda _m: None, license=licensing.DEMO)
+                      progress=lambda _m: None, license=licensing.DEMO,
+                      tools=["gemini-cli", "copilot-cli", "claude-desktop"])
 
 
 def test_restore_is_never_gated(demo_backup):

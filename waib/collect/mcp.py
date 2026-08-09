@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Iterable
 
-from ..catalog import TARGETS
+from ..catalog_loader import targets
 from ..model import McpSource
 from ..paths import expand, portable
 from ..util import load_structured, redact
@@ -116,7 +116,7 @@ def build_registry() -> dict[str, Any]:
     servers: dict[str, dict[str, Any]] = {}
     scanned: list[dict[str, Any]] = []
 
-    sources = [src for target in TARGETS for src in target.mcp_sources]
+    sources = [src for target in targets() for src in target.mcp_sources]
     for source in sources:
         path = expand(source.path)
         entries = list(_extract(source))

@@ -65,30 +65,48 @@ DEMO = License(Edition.DEMO)
 
 # --------------------------------------------------------------------- limits
 
-#: Tools a demo backup will capture. Chosen to be genuinely useful on their own.
-DEMO_TARGET_IDS = frozenset({
-    "claude-code",
-    "claude-desktop",
-    "codex",
-    "gemini-cli",
-    "cursor",
-})
+#: How many tools a Demo backup may capture. Which five is the user's choice.
+DEMO_TOOL_LIMIT = 5
+
+#: Used only when the user does not pick, so the Demo still lands on something
+#: useful. Anything present but not in this list can still be chosen explicitly.
+DEMO_PREFERRED_ORDER = (
+    "claude-code", "cursor", "codex", "gemini-cli", "claude-desktop",
+    "vscode", "windsurf", "copilot-cli", "antigravity", "cline-cli",
+    "opencode", "aider", "ollama", "lmstudio", "continue",
+)
 
 DEMO_LIMITS = (
-    f"Backs up {len(DEMO_TARGET_IDS)} of 25 tools "
-    "(Claude Code, Claude Desktop, Codex, Gemini CLI, Cursor)",
+    f"Backs up any {DEMO_TOOL_LIMIT} tools you choose (--tools), out of every tool found",
     "No encrypted credential vault (--secrets is Premium)",
+    "No discovery of uncatalogued tools (--discover is Premium)",
     "Custom MCP server source is listed but not copied",
     "INVENTORY.md carries a demo notice",
 )
 
 PREMIUM_FEATURES = (
-    "All 25 tools, and every tool added in future versions",
+    "Unlimited tools — every one found on the machine, and every tool added later",
+    "Discovery of AI tools that are not in the catalog yet",
     "Encrypted credential vault (AES-256-GCM, scrypt-derived key)",
     "Custom MCP server source captured and rebuilt on restore",
     "Clean, unwatermarked reports",
     "One-time $1 — no subscription, no account, works offline forever",
 )
+
+
+def demo_selection(present_ids: list[str], requested: list[str] | None = None) -> list[str]:
+    """Choose which tools a Demo backup captures.
+
+    An explicit ``--tools`` selection wins, truncated to the limit. Otherwise the
+    preferred order picks the most broadly useful tools that are actually present,
+    topped up with whatever else was found.
+    """
+    if requested:
+        return [t for t in requested if t in present_ids][:DEMO_TOOL_LIMIT]
+
+    ranked = [t for t in DEMO_PREFERRED_ORDER if t in present_ids]
+    ranked += [t for t in present_ids if t not in ranked]
+    return ranked[:DEMO_TOOL_LIMIT]
 
 
 # ---------------------------------------------------------------- verification
