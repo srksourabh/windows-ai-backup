@@ -1,0 +1,20 @@
+# Publisher signing key — NEVER commit. Losing it invalidates issued licenses.
+tools/publisher_private.key
+*.key
+!*.pub.key
+
+# Build output
+build/
+dist/
+*.spec
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local scratch
+.tmp_key
+*.bak
